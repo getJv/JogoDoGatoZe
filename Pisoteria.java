@@ -8,15 +8,30 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class Pisoteria extends Objeto
 {
-    /**
-     * Act - do whatever the Pisoteria wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
-     */
+    
+
+    public Pisoteria(){
+        definirTamanho(100);
+        definirFiletaInicial(1);
+        definirArquivoDaImagem("objetos/piso/piso_",".png");
+        definirLarguraDaFileta(4);
+        definirAlturaDaFileta(54);
+        definirQuantidadeDeFiletas(41);
+        criar();
+    }
+
+    public Pisoteria(int tamanho,int posicaoInicial){
+        definirTamanho(tamanho);
+        definirFiletaInicial(posicaoInicial);
+        definirArquivoDaImagem("objetos/piso/piso_",".png");
+        definirLarguraDaFileta(4);
+        definirAlturaDaFileta(54);
+        definirQuantidadeDeFiletas(41);
+        criar();
+    }
+
     public void act() 
     {
         super.act();
     }
-    
-    
-    
 }

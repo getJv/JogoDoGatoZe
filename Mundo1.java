@@ -58,8 +58,10 @@ public class Mundo1 extends World
         //addObject(new Plataforma(), 564, 276);
         //addObject(new Plataforma(), 650,203);
         addObject(ze, 83, alturaInicialDoSolo(ze)-100);
+        Pisoteria piso = new Pisoteria(100,1);
+        addObject(piso, 350, alturaInicialDoSolo(piso));
 
-        prepare();
+        //prepare();
     }
 
     /**
@@ -177,11 +179,9 @@ public class Mundo1 extends World
      * Retorna todos os objetos do cenário que deve ser atualizados conforme a movimentaçao do personagem
      * OBS: no futuro poderá retor nar apenas a classe Objeto que assim ja deve resolver... vamos ver
      */
-    private List<Actor> getObjetosDoCenario(){
-        List<Actor> listaDeObjetos = new ArrayList<Actor>();
-        //listaDeObjetos.addAll( getObjects(Plataforma.class));
-        //listaDeObjetos.addAll( getObjects(Piso.class));
-        listaDeObjetos.addAll( getObjects(Objeto.class)); // Chamada generica
+    private ArrayList<Objeto> getObjetosDoCenario(){
+        ArrayList<Objeto> listaDeObjetos = new ArrayList<Objeto>();
+        listaDeObjetos.addAll( getObjects(Objeto.class));
         return listaDeObjetos;
 
     }
@@ -189,17 +189,30 @@ public class Mundo1 extends World
     /**
      * Metodo temporário para teste de movimento
      */
-    private void retirarObjetoDaCena(Actor objeto){
+    private void retirarObjetoDaCena(Objeto objeto){
 
         if(objeto.getX() == 0) {
-            PisoReto p = new PisoReto();
-            addObject(p, LARGURA_CENARIO, objeto.getY());
-            removeObject(objeto);
+
+            if(objeto.pegarTamanho() - 4 < 1){
+                
+                Pisoteria p = new Pisoteria();
+                addObject(p, LARGURA_CENARIO, objeto.getY());
+                removeObject(objeto);
+            }else{
+                objeto.redesenhar(objeto.pegarTamanho() - 4, objeto.pegarFiletaInicial()+1); // criar metodo especifico no Objeto
+            }
 
         }else if(objeto.getX() == LARGURA_CENARIO-1) {
-            PisoReto p = new PisoReto();
-            addObject(p, 0, objeto.getY());
-            removeObject(objeto);
+            
+            if(objeto.pegarTamanho() - 4 < 1){
+                Pisoteria p = new Pisoteria();
+                addObject(p, 0, objeto.getY());
+                removeObject(objeto);
+            }else{
+                objeto.redesenhar(objeto.pegarTamanho() - 4, objeto.pegarFiletaInicial()-1);// criar metodo especifico no Objeto
+            }
+                
+            
 
         }
 
@@ -210,16 +223,16 @@ public class Mundo1 extends World
      */
     private void atualizaObjetosdoCenario(){
 
-        List<Actor> objetosDoCenario = getObjetosDoCenario();
+        ArrayList<Objeto> objetosDoCenario = getObjetosDoCenario();
 
         if(ze.estaIndoPraDireta() && oCenarioPodeAtualizar){
-            for(Actor objeto : objetosDoCenario){
+            for(Objeto objeto : objetosDoCenario){
                 objeto.move(TAMANHO_DO_QUADRO * -1);
-                retirarObjetoDaCena(objeto);
+                retirarObjetoDaCena( objeto);
             }
         }
         if(ze.estaIndoPraEsquerda() && oCenarioPodeAtualizar){
-            for(Actor objeto : objetosDoCenario){
+            for(Objeto objeto : objetosDoCenario){
                 objeto.move(TAMANHO_DO_QUADRO );
                 retirarObjetoDaCena(objeto);
             }
@@ -301,7 +314,7 @@ public class Mundo1 extends World
      * Prepara o mundo para o início do programa.
      * Ou seja: criar os objetos iniciais e adicioná-los ao mundo.
      */
-    private void prepare()
+    private void Oldprepare()
     {
         PisoReto pisoreto = new PisoReto();
         addObject(pisoreto,320,363);

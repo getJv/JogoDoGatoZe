@@ -8,10 +8,19 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 abstract class Objeto extends Actor
 {
-    private  Personagem personagem;
-    private  Mundo1 mundo;
-    public static final int  LIMITE_DA_QUINA = 10;
+    private  Personagem personagem; // Guarda o personagem que é utilizado em toda a classe
+    private  Mundo1 mundo; // Guarda o mundo que é utilizado em toda a classe
+    public static final int  LIMITE_DA_QUINA = 10; // limita o limite da quina do objeto para que o personagem 'pise'
+    protected int tamanho; //Guarda o tamanho desejado para o objeto
+    protected int filetaInicial; //Guarda a posição inicial para desenho da nova imagem do objeto 
+    protected String nomeDoArquivo; //Guarda o caminho para a imagem do objeto
+    protected String extensaoDoArquivo; //Guarda a extensão do arquivo utilizado
+    protected int larguraDaFileta; //Guarda a largura do filete utilizado
+    protected int alturaDaFileta; //Guarda a altura do filete utilizado
+    protected int quantidadeDeFiletas;//Guarda a quantidade do filete utilizado
+    
 
+         
     /**
      * Act - do whatever the Objeto wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
@@ -140,4 +149,70 @@ abstract class Objeto extends Actor
         boolean tt = (pes - topo) <= 4; // usei a diferença pq a precisão de (pes < topo) não nos atende, o valor 4 foi selecionado pq é o valor minimo da diferença de (pes - topo)
         return tt;
     }
+    
+    protected void definirLarguraDaFileta(int largura){
+        this.larguraDaFileta = largura;
+    }
+
+    protected void definirQuantidadeDeFiletas(int quantidade){
+        this.quantidadeDeFiletas = quantidade;
+    }
+
+    protected void definirAlturaDaFileta(int altura){
+        this.alturaDaFileta = altura;
+    }
+
+    protected void definirArquivoDaImagem(String caminhoDoArquivo,String nomeDaExtensao){
+        this.nomeDoArquivo     = caminhoDoArquivo;
+        this.extensaoDoArquivo = nomeDaExtensao;
+    }
+
+    public int pegarTamanho(){     
+        return this.tamanho;
+    }
+
+    public void definirTamanho(int novoTamanho){     
+        this.tamanho = novoTamanho;
+    }
+    
+    public void definirPosicaoInicial(int proximaFileta){     
+        this.filetaInicial = proximaFileta;
+    }
+    public int pegarFiletaInicial(){
+        return this.filetaInicial;
+    }
+    public void definirFiletaInicial(int proximaFileta){     
+        this.filetaInicial = proximaFileta;
+    }
+
+    protected void criar(){
+
+        setImage(desenhar());
+    }
+
+    public void redesenhar(int tamanho,int posicaoInicial){
+        definirTamanho(tamanho);
+        definirPosicaoInicial(posicaoInicial);
+        setImage(desenhar());
+    }
+
+    protected GreenfootImage desenhar(){
+
+        GreenfootImage novoPiso = new GreenfootImage(pegarTamanho(),alturaDaFileta); 
+        int posicaoDaNovaFileta = 0; 
+        int filetaAtual = this.filetaInicial; 
+        while(posicaoDaNovaFileta < novoPiso.getWidth()){ 
+            if(filetaAtual > quantidadeDeFiletas){ 
+                filetaAtual = 1; 
+            }else if(filetaAtual < 1){
+                filetaAtual = quantidadeDeFiletas;
+            }
+            novoPiso.drawImage(new GreenfootImage(nomeDoArquivo + filetaAtual + extensaoDoArquivo), posicaoDaNovaFileta, 0); 
+            filetaAtual++; 
+            posicaoDaNovaFileta += larguraDaFileta; 
+        }
+        return novoPiso;
+
+    }
+
 }
