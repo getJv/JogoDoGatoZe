@@ -8,7 +8,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 abstract class Personagem extends Actor
 {
-    //Constantes do Gato
+    //Constantes do Personagem
     public static final int ALTURA_DO_PULO = 15; 
     public static final int TAMANHO_DO_PASSO = 1;
 
@@ -20,6 +20,11 @@ abstract class Personagem extends Actor
     protected boolean estaParado = true;
     protected boolean estaParaDireita = true;
     protected boolean estaParaEsquerda = false;
+    protected boolean estaNoIniciDoCenario = false;
+    /**
+     * Marca a posicao atual do personagem dentro do percurso total do cenário
+     */
+    public int KMatual = 0;
 
     /**
      * Act - do whatever the Personagens wants to do. This method is called whenever
@@ -27,7 +32,7 @@ abstract class Personagem extends Actor
      */
     public void act() 
     {
-        // Add your action code here.
+        
     }
 
     /**
@@ -61,6 +66,7 @@ abstract class Personagem extends Actor
     public boolean estaIndoPraDireta(){
 
         if(proximoPasso >= 1 && proximoPasso < 7 && estaParaDireita && !estaParado ){
+            //this.aumentaKM();
             return true;
         }
         return false;
@@ -72,6 +78,7 @@ abstract class Personagem extends Actor
     public boolean estaIndoPraEsquerda(){
 
         if(proximoPasso >= 7 && proximoPasso < 13 && estaParaEsquerda && !estaParado){
+            //this.diminuiKM();
             return true;
         }
         return false;
@@ -94,7 +101,7 @@ abstract class Personagem extends Actor
     public void caminheParaEsquerda(){
         estaParaDireita = false;
         estaParaEsquerda = true;
-        estaParado = false;
+        if (!estaNoIniciDoCenario)estaParado = false;
 
     }
 
@@ -104,7 +111,7 @@ abstract class Personagem extends Actor
     public void fiqueParado(){
         estaParado = true;
     }
-    
+
     /**
      * Informa ao personagem que ele esta em terra firme
      */
@@ -113,6 +120,7 @@ abstract class Personagem extends Actor
         estaEmTerraFirme = true;
         estaPulando = false;
     }
+
     /**
      *  Verifica se o personagem esta no nível do solo
      */
@@ -127,6 +135,7 @@ abstract class Personagem extends Actor
         return false;
 
     }
+
     /**
      *  Verifica se o personagem esta  acima do nível do solo
      */
@@ -141,6 +150,7 @@ abstract class Personagem extends Actor
         return false;
 
     }
+
     /**
      *  Verifica se o personagem esta  abaixo do nível do solo
      */
@@ -155,6 +165,7 @@ abstract class Personagem extends Actor
         return false;
 
     }
+
     /**
      * Retorna a altura atual do personagem considerando a altura dos pés
      */
@@ -165,14 +176,44 @@ abstract class Personagem extends Actor
         return alturaAtual;
 
     }
-    
+
     /**
      * Retorna a altura dos pés do personagem dentro do jogo
      */
     public int alturaDosPes(){
         return getY() + getImage().getHeight()/2;
     }
+
+    /**
+     * Sempre que o personagem vai para direita aumentamos um KM, na sua posicao no percurso total do cenário
+     */
+    public void aumentaKM(){
+        this.KMatual+=4;
+        estaNoIniciDoCenario = false;
+    }
+
+    /**
+     * Sempre que o personagem vai para esquerda diminuimos um KM, na sua posicao no percurso total do cenário
+     */
+    public void diminuiKM(){
+        this.KMatual-=4;
+        if(this.KMatual < 1){estaNoIniciDoCenario = true;}
+    }
+
+    /**
+     * Retorna a posicao atual do personagem dentro do tamanho do cenário
+     */
+    public int KMAtual(){
+        return this.KMatual;
+    }
     
     
-    
+    /**
+     * Informa ao personagem que ele esta em terra firme
+     */
+    public boolean estaNoIniciDoCenario(){
+       return this.estaNoIniciDoCenario;
+       
+    }
+
 }

@@ -15,6 +15,8 @@ public class Gato extends Personagem
      */
     public void act()
     {
+        super.act();
+        
         if(Greenfoot.isKeyDown("right")){
             caminheParaDireita();
             marcarPasso();

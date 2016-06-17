@@ -18,7 +18,9 @@ public class Mundo1 extends World
     public static final String  MUSICA_DO_MUNDO1 = "Summer_Smile.mp3";
     public static final int     QUANTIDADE_DE_QUADROS = 350;
     public static final int     TAMANHO_DO_QUADRO = 4;
+    public static final int     POSICAO_INICIAL_PERSONAGEM = 250;
     public static final double  VELOCIDADE_ATUALIZACAO_QUADROS = 1;
+    public static final int     TAMANHO_DO_MUNDO1 = 700 * 4; // Largura do cenário vezes 4
 
     //Constantes da Natureza do mundo
     public static final int     LARGURA_CENARIO = 700;
@@ -27,14 +29,26 @@ public class Mundo1 extends World
     public static final int     FORCA_DA_GRAVIDADE = 5;
 
     //Variáveis de  controle do Jogo
+    /**
+     * Controla o quadro/fileta atual que foi apresentada no cenário 
+     */
     private int quadroAtual = 1;
+
+    /**
+     * Conta quantas vezes todos os métodos act() de todos o s objetos foram executados
+     */
     private int cicloAtual  = 0;
+
+    /**
+     * Informa se o cenário pode ou não ser atualizado
+     */
     private boolean oCenarioPodeAtualizar = true;
 
     //Objetos vivos do Jogo
     private GreenfootImage cenarioInicial;
     private Gato ze;
     private Objeto plataforma;
+    private MostraTexto mt;
 
     /**
      * Contrutor do cenário.
@@ -54,12 +68,13 @@ public class Mundo1 extends World
         //criaSolo();
         addObject(instrucoes, 602, 80);
 
-        //addObject(new Plataforma(), 434, 298);
-        //addObject(new Plataforma(), 564, 276);
-        //addObject(new Plataforma(), 650,203);
-        addObject(ze, 83, alturaInicialDoSolo(ze)-100);
+        addObject(ze, POSICAO_INICIAL_PERSONAGEM, alturaInicialDoSolo(ze));
         Pisoteria piso = new Pisoteria(100,1);
         addObject(piso, 350, alturaInicialDoSolo(piso));
+        
+        //Coloca o objeto que mostra valores na tela
+        mt = new MostraTexto();
+        addObject(mt, 100,10);
 
         //prepare();
     }
@@ -77,6 +92,7 @@ public class Mundo1 extends World
     private void contaCiclo(){
         cicloAtual++;
         if(cicloAtual > 1000){
+
             cicloAtual = 0;
         }
 
@@ -89,14 +105,15 @@ public class Mundo1 extends World
     {
         //valido se o cenário deve ou não ser atualizado com a proxima cena
         if(ze.estaIndoPraDireta() || ze.estaIndoPraEsquerda()  ){
-
             projetor( proximaCena()); 
-
             atualizaObjetosdoCenario();
+
         } 
         //criaSolo();
+        verificarLimitesDoCenario();
         contaCiclo();
         aplicarForcaDaGravidade();
+        mt.atualiza(Integer.toString(ze.KMAtual()) );
     }
 
     /**
@@ -139,8 +156,10 @@ public class Mundo1 extends World
 
         if(ze.estaIndoPraDireta()){
             this.quadroAtual += VELOCIDADE_ATUALIZACAO_QUADROS;
+            ze.aumentaKM();
         }else{
             this.quadroAtual -= VELOCIDADE_ATUALIZACAO_QUADROS;
+            ze.diminuiKM();
         }
 
     }
@@ -194,7 +213,7 @@ public class Mundo1 extends World
         if(objeto.getX() == 0) {
 
             if(objeto.pegarTamanho() - 4 < 1){
-                
+
                 Pisoteria p = new Pisoteria();
                 addObject(p, LARGURA_CENARIO, objeto.getY());
                 removeObject(objeto);
@@ -203,7 +222,7 @@ public class Mundo1 extends World
             }
 
         }else if(objeto.getX() == LARGURA_CENARIO-1) {
-            
+
             if(objeto.pegarTamanho() - 4 < 1){
                 Pisoteria p = new Pisoteria();
                 addObject(p, 0, objeto.getY());
@@ -211,11 +230,8 @@ public class Mundo1 extends World
             }else{
                 objeto.redesenhar(objeto.pegarTamanho() - 4, objeto.pegarFiletaInicial()-1);// criar metodo especifico no Objeto
             }
-                
-            
 
         }
-
     }
 
     /**
@@ -306,6 +322,22 @@ public class Mundo1 extends World
         while(posicaoDoQuadro < getWidth()){ // Começo a criar a imagem
             addObject(new PisoReto(), posicaoDoQuadro, 363);
             posicaoDoQuadro += 87; // atualizo para a posição da nova fileta
+        }
+
+    }
+
+    /**
+     * Verifica se o personagem esta no inicio ou fim do cenário, se estiver ele coloca um objeto para impedir o avanço do personagem além desses limites
+     */
+    private void verificarLimitesDoCenario(){
+        if(ze.KMAtual() < 0){
+            if(getObjects(Linha.class).isEmpty()){
+                addObject(new Linha(), 0, alturaInicialDoSolo(new Linha()));
+            }
+        }else if(ze.KMAtual() > TAMANHO_DO_MUNDO1){
+            if(getObjects(Linha.class).isEmpty()){
+                addObject(new Linha(), LARGURA_CENARIO, alturaInicialDoSolo(new Linha()));
+            }
         }
 
     }

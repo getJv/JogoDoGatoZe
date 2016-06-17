@@ -1,5 +1,5 @@
 #Greenfoot properties
-#Wed Jun 15 13:33:49 BRT 2016
+#Fri Jun 17 15:28:22 BRT 2016
 editor.fx.0.height=700
 target2.width=80
 target8.name=Mundo1
@@ -37,6 +37,7 @@ dependency14.from=Mundo1
 target10.typeParameters=
 dependency4.from=Plataforma
 dependency5.to=Gato
+class.Linha.superclass=Objeto
 class.PisoReto.superclass=Objeto
 class.Instrucoes.superclass=greenfoot.Actor
 publish.longDesc=O Jogo do Gato Z\u00E9 \u00E9 um jogo de plataforma gen\u00E9rico que foi desenvolvido para servir de modelo para o ensino b\u00E1sico de programa\u00E7\u00E3o de jogos e uso das funcionalidades da plataforma Greenfoot que ser\u00E3o apresentados na s\u00E9rie de v\u00EDdeos do GreenLabs laborat\u00F3rio de Jogos do GreenfootBR.
@@ -93,6 +94,7 @@ target6.name=PisoE
 target9.height=50
 dependency10.type=UsesDependency
 editor.fx.0.width=700
+class.MostrTexto.superclass=greenfoot.Actor
 target10.y=250
 target10.x=10
 dependency2.to=Gato
