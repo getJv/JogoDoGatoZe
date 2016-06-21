@@ -315,16 +315,7 @@ public class Mundo1 extends World
         }
 
     }
-    // Temporario apenas para teste
-    private void criaSolo(){
-        int larguraPiso = 87;
-        int posicaoDoQuadro = 0; //será a posição da fileta(slice/quadros) dentro da imagem do cenário
-        while(posicaoDoQuadro < getWidth()){ // Começo a criar a imagem
-            addObject(new PisoReto(), posicaoDoQuadro, 363);
-            posicaoDoQuadro += 87; // atualizo para a posição da nova fileta
-        }
-
-    }
+    
 
     /**
      * Verifica se o personagem esta no inicio ou fim do cenário, se estiver ele coloca um objeto para impedir o avanço do personagem além desses limites
@@ -342,32 +333,6 @@ public class Mundo1 extends World
 
     }
 
-    /**
-     * Prepara o mundo para o início do programa.
-     * Ou seja: criar os objetos iniciais e adicioná-los ao mundo.
-     */
-    private void Oldprepare()
-    {
-        PisoReto pisoreto = new PisoReto();
-        addObject(pisoreto,320,363);
-        pisoreto.setLocation(329,363);
-        PisoReto pisoreto2 = new PisoReto();
-        addObject(pisoreto2,423,363);
-        pisoreto2.setLocation(416,363);
-        PisoReto pisoreto3 = new PisoReto();
-        addObject(pisoreto3,510,363);
-        pisoreto3.setLocation(503,363);
-        PisoReto pisoreto4 = new PisoReto();
-        addObject(pisoreto4,418,315);
-        pisoreto4.setLocation(408,308);
-        PisoReto pisoreto5 = new PisoReto();
-        addObject(pisoreto5,295,223);
-        pisoreto5.setLocation(293,223);
-        pisoreto5.setLocation(495,308);
-        PisoReto pisoreto6 = new PisoReto();
-        addObject(pisoreto6,663,271);
-        pisoreto6.setLocation(657,257);
-        pisoreto6.setLocation(641,309);
-    }
+    
 }
 

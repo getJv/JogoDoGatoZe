@@ -59,6 +59,11 @@ abstract class Personagem extends Actor
      * Gerencia o movimento do pulo desde o inicio(subida) até a sua aterrisagem
      */
     abstract void pulando();
+    
+    /**
+     * Pulo interrompido devido a colisão com um objeto
+     */
+    abstract void interromperPulo();
 
     /**
      * Retornar verdadeiro se atualmente o personagem estiver caminhando para direita

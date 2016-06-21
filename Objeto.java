@@ -31,7 +31,9 @@ abstract class Objeto extends Actor
         if(temAlguemAqui()  ){
             bloqueiaLadoEsquerdo();
             bloqueiaLadoDireito();
-            bloqueiaQueda();
+            bloqueiaQueda(); 
+            bloqueiaFundo(); 
+            
         }
     } 
 
@@ -43,7 +45,7 @@ abstract class Objeto extends Actor
         int ladoDireitoDoator = this.personagem.getX() + (this.personagem.getImage().getWidth()/2) - Mundo1.TAMANHO_DO_QUADRO;
         int ladoesquerdoDaPlataforma = 1 + this.getX() - (this.getImage().getWidth()/2);
         if(personagem.estaIndoPraDireta()){
-            if( (ladoDireitoDoator - ladoesquerdoDaPlataforma) < 10 && !oPersonagemEstaAcimaDoObjeto() && !estaSobreMim(this.personagem) ){
+            if( (ladoDireitoDoator - ladoesquerdoDaPlataforma) < 10 && !oPersonagemEstaAcimaDoObjeto() && !estaSobMeuPerimetro(this.personagem) ){
 
                 mundo.oCenarioNaoPodeAtualizar();
                 personagem.fiqueParado();
@@ -65,7 +67,7 @@ abstract class Objeto extends Actor
         int ladoEsquerdoDoator = this.personagem.getX() - (this.personagem.getImage().getWidth()/2) - Mundo1.TAMANHO_DO_QUADRO;
         int ladoDireitoDaPlataforma = 1 + this.getX() + (this.getImage().getWidth()/2);
         if (personagem.estaIndoPraEsquerda()){
-            if( (ladoDireitoDaPlataforma - ladoEsquerdoDoator) < 10 && !oPersonagemEstaAcimaDoObjeto() && !estaSobreMim(this.personagem)){
+            if( (ladoDireitoDaPlataforma - ladoEsquerdoDoator) < 10 && !oPersonagemEstaAcimaDoObjeto() && !estaSobMeuPerimetro(this.personagem)){
 
                 mundo.oCenarioNaoPodeAtualizar();
                 personagem.fiqueParado();
@@ -83,29 +85,51 @@ abstract class Objeto extends Actor
     /**
      * Realiza a colisão topo-fundo para impedir o avanço através do objeto
      */
-    protected void bloqueiaQueda(){
+    protected boolean bloqueiaQueda(){
 
         int peDoator = this.personagem.getY() + (this.personagem.getImage().getHeight()/2);
         int tetoDaPlataforma = this.getY() - (this.getImage().getHeight()/2);
         int tt = tetoDaPlataforma - peDoator;
 
-        if( estaSobreMim(personagem) && (tetoDaPlataforma - peDoator < 0 )){
+        if( estaSobMeuPerimetro(personagem) && (tetoDaPlataforma > peDoator  )){
 
             mundo.oCenarioPodeAtualizar();
             //O espaço entre o pé e a plataforma é devido a imagem do gato, mostrar isso ao alunos
             int novaAltura =  peDoator - (this.personagem.getImage().getHeight()/2) - Mundo1.FORCA_DA_GRAVIDADE ; 
             personagem.setLocation(personagem.getX(),novaAltura);
             personagem.estaEmTerraFirme(); 
-            //personagem.fiqueParado();
-
+            return true;
         }
+        return false;
+    } 
+
+    /**
+     * Realiza a colisão fundo-cabeça para impedir o avanço através do objeto de baixo para cima
+     */
+    protected boolean bloqueiaFundo(){
+
+        int cabecaDoAtor = this.personagem.getY() - (this.personagem.getImage().getHeight()/2);
+        int fundoDoObjeto = this.getY() + (this.getImage().getHeight()/2);
+        int tt =  cabecaDoAtor - fundoDoObjeto;
+
+        if( estaSobMeuPerimetro(personagem) && ( cabecaDoAtor > fundoDoObjeto  )){
+
+            mundo.oCenarioPodeAtualizar();
+            //O espaço entre o pé e a plataforma é devido a imagem do gato, mostrar isso ao alunos
+            int novaAltura =  cabecaDoAtor + (this.personagem.getImage().getHeight()/2) + Mundo1.FORCA_DA_GRAVIDADE ; 
+            personagem.setLocation(personagem.getX(),novaAltura);
+            personagem.interromperPulo();
+            return true;
+        }
+        return false;
 
     }
-
+    
+    
     /**
      * verifica se a colisão topo-fundo aconteceu
      */
-    private boolean estaSobreMim(Personagem ator){
+    private boolean estaSobMeuPerimetro(Personagem ator){
 
         int limiteEsquerdoDoAtor = ator.getX() - ator.getImage().getWidth()/2;
         int limiteDireitoDoAtor  = ator.getX() + ator.getImage().getWidth()/2;
@@ -122,6 +146,9 @@ abstract class Objeto extends Actor
         return false; 
 
     }
+    
+        
+    
 
     /**
      * verifica se houve um a colisão 

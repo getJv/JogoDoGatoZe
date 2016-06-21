@@ -35,7 +35,7 @@ public class Gato extends Personagem
             }
         }
 
-        if(Greenfoot.isKeyDown("space") && estaEmTerraFirme){
+        if(Greenfoot.isKeyDown("space") && estaEmTerraFirme ){
             estaPulando      = true;
             estaEmTerraFirme = false;
         }
@@ -151,4 +151,17 @@ public class Gato extends Personagem
         }
 
     }
+    
+    /**
+     * Pulo interrompido devido a colisão com um objeto
+     */
+    protected void interromperPulo(){
+            estaPulando = false;
+            alturaAtualDoPulo = 0;
+            setImage(retornaImagem());
+            
+    
+    }
+    
+    
 }
