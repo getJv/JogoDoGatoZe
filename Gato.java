@@ -16,7 +16,7 @@ public class Gato extends Personagem
     public void act()
     {
         super.act();
-        
+
         if(Greenfoot.isKeyDown("right")){
             caminheParaDireita();
             marcarPasso();
@@ -24,14 +24,12 @@ public class Gato extends Personagem
             if(getX() < getWorld().getWidth()/6 || estaPulando){
                 //move(TAMANHO_DO_PASSO);
             }
-        }
-
-        if(Greenfoot.isKeyDown("left")){
+        }else if(Greenfoot.isKeyDown("left")){
             caminheParaEsquerda();
             marcarPasso();
             setImage(retornaImagem());
             if(getX() > getWorld().getWidth()/3|| estaPulando){
-              // move(TAMANHO_DO_PASSO *(-1));
+                // move(TAMANHO_DO_PASSO *(-1));
             }
         }
 
@@ -54,9 +52,9 @@ public class Gato extends Personagem
      * Utiliza o valor dos ciclos do cenário para criar o atraso necessário a atualização da sprite de movimento do personagem
      */
 
-    protected boolean possoAtualizar(){
+    protected boolean possoAtualizarImagem(){
         Mundo1 mundo = (Mundo1) getWorld();
-        return (mundo.getCiclo()% (TAMANHO_DO_PASSO * Mundo1.TAMANHO_DO_QUADRO + Mundo1.TAMANHO_DO_QUADRO/2) ) == 0;
+        return mundo.getCiclo() % INTERVALO_DE_ATUALIZACAO  == 0;
     }
 
     /**
@@ -66,7 +64,7 @@ public class Gato extends Personagem
 
         if(estaParaDireita ){
 
-            if(possoAtualizar()){
+            if(possoAtualizarImagem()){
                 proximoPasso++;
             } 
 
@@ -76,7 +74,9 @@ public class Gato extends Personagem
 
         }else if(estaParaEsquerda){
 
-            if(possoAtualizar()){ proximoPasso++;}
+            if(possoAtualizarImagem()){
+                proximoPasso++;
+            }
             if(proximoPasso < 7 || proximoPasso > 12 ){
                 proximoPasso = 7;
             }
@@ -151,17 +151,13 @@ public class Gato extends Personagem
         }
 
     }
-    
+
     /**
      * Pulo interrompido devido a colisão com um objeto
      */
     protected void interromperPulo(){
-            estaPulando = false;
-            alturaAtualDoPulo = 0;
-            setImage(retornaImagem());
-            
-    
+        estaPulando = false;
+        alturaAtualDoPulo = 0;
     }
-    
     
 }

@@ -71,7 +71,7 @@ public class Mundo1 extends World
         addObject(ze, POSICAO_INICIAL_PERSONAGEM, alturaInicialDoSolo(ze));
         Pisoteria piso = new Pisoteria(100,1);
         addObject(piso, 350, alturaInicialDoSolo(piso));
-        
+
         //Coloca o objeto que mostra valores na tela
         mt = new MostraTexto();
         addObject(mt, 100,10);
@@ -315,7 +315,6 @@ public class Mundo1 extends World
         }
 
     }
-    
 
     /**
      * Verifica se o personagem esta no inicio ou fim do cenário, se estiver ele coloca um objeto para impedir o avanço do personagem além desses limites
@@ -333,6 +332,4 @@ public class Mundo1 extends World
 
     }
 
-    
 }
-

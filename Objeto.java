@@ -10,7 +10,7 @@ abstract class Objeto extends Actor
 {
     private  Personagem personagem; // Guarda o personagem que é utilizado em toda a classe
     private  Mundo1 mundo; // Guarda o mundo que é utilizado em toda a classe
-    public static final int  LIMITE_DA_QUINA = 10; // limita o limite da quina do objeto para que o personagem 'pise'
+    public static final int  LIMITE_DA_COLISAO = 9; // limita o limite da quina do objeto para que o personagem 'toque' e se considere como colisão
     protected int tamanho; //Guarda o tamanho desejado para o objeto
     protected int filetaInicial; //Guarda a posição inicial para desenho da nova imagem do objeto 
     protected String nomeDoArquivo; //Guarda o caminho para a imagem do objeto
@@ -18,9 +18,7 @@ abstract class Objeto extends Actor
     protected int larguraDaFileta; //Guarda a largura do filete utilizado
     protected int alturaDaFileta; //Guarda a altura do filete utilizado
     protected int quantidadeDeFiletas;//Guarda a quantidade do filete utilizado
-    
 
-         
     /**
      * Act - do whatever the Objeto wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
@@ -33,127 +31,151 @@ abstract class Objeto extends Actor
             bloqueiaLadoDireito();
             bloqueiaQueda(); 
             bloqueiaFundo(); 
-            
+        }else{
+            mundo.oCenarioPodeAtualizar();
         }
     } 
 
     /**
-     * Realiza a colisão esquerda-direita para impedir o avanço através do objeto
+     * Realiza a bloqueio da passagem do ator pelo lado esquerdo do objeto.
      */
     protected void bloqueiaLadoEsquerdo(){
-
-        int ladoDireitoDoator = this.personagem.getX() + (this.personagem.getImage().getWidth()/2) - Mundo1.TAMANHO_DO_QUADRO;
-        int ladoesquerdoDaPlataforma = 1 + this.getX() - (this.getImage().getWidth()/2);
         if(personagem.estaIndoPraDireta()){
-            if( (ladoDireitoDoator - ladoesquerdoDaPlataforma) < 10 && !oPersonagemEstaAcimaDoObjeto() && !estaSobMeuPerimetro(this.personagem) ){
-
+            if( houveColisaoDoLadoEsquerdo() && !oPersonagemEstaAcimaDoObjeto() && !estaSobMeuPerimetro() ){
                 mundo.oCenarioNaoPodeAtualizar();
                 personagem.fiqueParado();
-
-            }else{
-
-                mundo.oCenarioPodeAtualizar();
-
             }
+        }else{
+            mundo.oCenarioPodeAtualizar();
         }
+    }
+
+    /**
+     * Confirma se houve de fato a colisão pelo lado esquerdo do objeto.
+     */
+    public boolean houveColisaoDoLadoEsquerdo(){
+
+        return (this.personagem.limiteDireito() - limiteEsquerdoDoObjeto() ) < LIMITE_DA_COLISAO;
 
     }
 
     /**
-     * Realiza a colisão direita-esquerda para impedir o avanço através do objeto
+     * Retorna o limite (coordenada X) do lado esquerdo do objeto  ;
+     */
+    public int limiteEsquerdoDoObjeto(){
+
+        return this.getX() - (this.getImage().getWidth()/2);
+
+    }
+
+    /**
+     * Retorna o limite (coordenada X) do lado esquerdo do objeto  ;
+     */
+    public int limiteDireitoDoObjeto(){
+
+        return this.getX() + (this.getImage().getWidth()/2);
+
+    }
+
+    /**
+     * Retorna o limite (coordenada Y) do TOPO do objeto  ;
+     */
+    public int limiteDoTopoDoObjeto(){
+
+        return this.getY() - (this.getImage().getHeight()/2);
+
+    }
+
+    /**
+     * Retorna o limite (coordenada Y) da BASE do objeto  ;
+     */
+    public int limiteDaBaseDoObjeto(){
+
+        return this.getY() + (this.getImage().getHeight()/2);
+
+    }
+
+    /**
+     * Realiza a bloqueio da passagem do ator pelo lado direito do objeto.
      */
     protected void bloqueiaLadoDireito(){
-
-        int ladoEsquerdoDoator = this.personagem.getX() - (this.personagem.getImage().getWidth()/2) - Mundo1.TAMANHO_DO_QUADRO;
-        int ladoDireitoDaPlataforma = 1 + this.getX() + (this.getImage().getWidth()/2);
         if (personagem.estaIndoPraEsquerda()){
-            if( (ladoDireitoDaPlataforma - ladoEsquerdoDoator) < 10 && !oPersonagemEstaAcimaDoObjeto() && !estaSobMeuPerimetro(this.personagem)){
-
+            if(  houveColisaoDoLadoDireito () && !oPersonagemEstaAcimaDoObjeto() && !estaSobMeuPerimetro() ){
                 mundo.oCenarioNaoPodeAtualizar();
                 personagem.fiqueParado();
-
-            }else{
-
-                mundo.oCenarioPodeAtualizar();
-
             }
+        }else{
+            mundo.oCenarioPodeAtualizar();
 
         }
+    }
 
+    /**
+     * Confirma se houve de fato a colisão pelo lado direito do objeto.
+     */
+    public boolean houveColisaoDoLadoDireito(){
+        return (limiteDireitoDoObjeto() - personagem.limiteEsquerdo()) < LIMITE_DA_COLISAO;
     }
 
     /**
      * Realiza a colisão topo-fundo para impedir o avanço através do objeto
      */
-    protected boolean bloqueiaQueda(){
-
-        int peDoator = this.personagem.getY() + (this.personagem.getImage().getHeight()/2);
-        int tetoDaPlataforma = this.getY() - (this.getImage().getHeight()/2);
-        int tt = tetoDaPlataforma - peDoator;
-
-        if( estaSobMeuPerimetro(personagem) && (tetoDaPlataforma > peDoator  )){
-
-            mundo.oCenarioPodeAtualizar();
-            //O espaço entre o pé e a plataforma é devido a imagem do gato, mostrar isso ao alunos
-            int novaAltura =  peDoator - (this.personagem.getImage().getHeight()/2) - Mundo1.FORCA_DA_GRAVIDADE ; 
+    protected void bloqueiaQueda(){
+        if( estaSobMeuPerimetro() && houveColisaoDoLadoDeCima()){
+            int novaAltura =  personagem.getY() - Mundo1.FORCA_DA_GRAVIDADE ; 
             personagem.setLocation(personagem.getX(),novaAltura);
             personagem.estaEmTerraFirme(); 
-            return true;
         }
-        return false;
-    } 
+
+    }
+
+    /**
+     * Confirma se houve de fato a colisão pelo lado de cima (topo) do objeto.
+     */
+    public boolean houveColisaoDoLadoDeCima(){
+        return ((personagem.alturaDosPes() - limiteDoTopoDoObjeto() ) <= LIMITE_DA_COLISAO  );
+    }
 
     /**
      * Realiza a colisão fundo-cabeça para impedir o avanço através do objeto de baixo para cima
      */
-    protected boolean bloqueiaFundo(){
-
-        int cabecaDoAtor = this.personagem.getY() - (this.personagem.getImage().getHeight()/2);
-        int fundoDoObjeto = this.getY() + (this.getImage().getHeight()/2);
-        int tt =  cabecaDoAtor - fundoDoObjeto;
-
-        if( estaSobMeuPerimetro(personagem) && ( cabecaDoAtor > fundoDoObjeto  )){
-
-            mundo.oCenarioPodeAtualizar();
-            //O espaço entre o pé e a plataforma é devido a imagem do gato, mostrar isso ao alunos
-            int novaAltura =  cabecaDoAtor + (this.personagem.getImage().getHeight()/2) + Mundo1.FORCA_DA_GRAVIDADE ; 
+    protected void bloqueiaFundo(){
+        if( estaSobMeuPerimetro() && houveColisaoDoLadoDeBaixo()){
+            int novaAltura =  personagem.getY() + Mundo1.FORCA_DA_GRAVIDADE; 
             personagem.setLocation(personagem.getX(),novaAltura);
             personagem.interromperPulo();
-            return true;
         }
-        return false;
-
     }
-    
-    
+
     /**
-     * verifica se a colisão topo-fundo aconteceu
+     * Confirma se houve de fato a colisão pelo lado de baixo (base) do objeto.
      */
-    private boolean estaSobMeuPerimetro(Personagem ator){
+    public boolean houveColisaoDoLadoDeBaixo(){
+        return  (limiteDaBaseDoObjeto() - personagem.alturaDaCabeca() ) <= LIMITE_DA_COLISAO  ;
+    }
 
-        int limiteEsquerdoDoAtor = ator.getX() - ator.getImage().getWidth()/2;
-        int limiteDireitoDoAtor  = ator.getX() + ator.getImage().getWidth()/2;
-        int meuLimiteEsquerdo = getX() - getImage().getWidth()/2 + LIMITE_DA_QUINA;
-        int meuLimiteDireito  = getX() + getImage().getWidth()/2 - LIMITE_DA_QUINA;
+    /**
+     * Verifica se o ator que colidiu esta dentro dos limites do objeto
+     */
+    private boolean estaSobMeuPerimetro(){
 
-        boolean teste1 = limiteEsquerdoDoAtor < meuLimiteDireito && limiteEsquerdoDoAtor > meuLimiteEsquerdo;
-        boolean teste2 = limiteDireitoDoAtor > meuLimiteEsquerdo && limiteDireitoDoAtor < meuLimiteDireito;
-        boolean teste3 = ator.getX() < meuLimiteDireito && ator.getX() > meuLimiteEsquerdo;
+        int limiteEsquerdoDoObjeto = limiteEsquerdoDoObjeto() + LIMITE_DA_COLISAO; // Mais a margem limite de colisão
+        int limiteDireitoDoObjeto  = limiteDireitoDoObjeto() - LIMITE_DA_COLISAO;  // menos a margem limite de colisão
 
-        if(teste1 || teste2 || teste3){
+        boolean todoLadoEsquerdoDoAtorEstaSobreObjeto = personagem.limiteEsquerdo() < limiteDireitoDoObjeto && personagem.limiteEsquerdo() > limiteEsquerdoDoObjeto;
+        boolean todoLadoDireitoDoAtorEstaSobreObjeto = personagem.limiteDireito() > limiteEsquerdoDoObjeto && personagem.limiteDireito() < limiteDireitoDoObjeto;
+
+        if(todoLadoEsquerdoDoAtorEstaSobreObjeto || todoLadoDireitoDoAtorEstaSobreObjeto ){
             return true;
         }
         return false; 
 
     }
-    
-        
-    
 
     /**
      * verifica se houve um a colisão 
      */
-    protected boolean temAlguemAqui(){
+    public boolean temAlguemAqui(){
         this.personagem = (Personagem) getOneIntersectingObject(Personagem.class);
         if(personagem != null){
             return true;
@@ -170,13 +192,13 @@ abstract class Objeto extends Actor
         return getY() - getImage().getHeight()/2;
     }
 
+    /**
+     * Verifica se a altura dos pes ator esta acima do topo do objeto
+     */
     public boolean oPersonagemEstaAcimaDoObjeto(){
-        int pes = this.personagem.alturaDosPes();
-        int topo = alturaDoTopo();
-        boolean tt = (pes - topo) <= 4; // usei a diferença pq a precisão de (pes < topo) não nos atende, o valor 4 foi selecionado pq é o valor minimo da diferença de (pes - topo)
-        return tt;
+        return personagem.alturaDosPes() <= alturaDoTopo();
     }
-    
+
     protected void definirLarguraDaFileta(int largura){
         this.larguraDaFileta = largura;
     }
@@ -201,13 +223,15 @@ abstract class Objeto extends Actor
     public void definirTamanho(int novoTamanho){     
         this.tamanho = novoTamanho;
     }
-    
+
     public void definirPosicaoInicial(int proximaFileta){     
         this.filetaInicial = proximaFileta;
     }
+
     public int pegarFiletaInicial(){
         return this.filetaInicial;
     }
+
     public void definirFiletaInicial(int proximaFileta){     
         this.filetaInicial = proximaFileta;
     }

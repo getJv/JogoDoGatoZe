@@ -9,8 +9,8 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 abstract class Personagem extends Actor
 {
     //Constantes do Personagem
-    public static final int ALTURA_DO_PULO = 15; 
-    public static final int TAMANHO_DO_PASSO = 1;
+    public static final int ALTURA_DO_PULO = 20; 
+    public static final int INTERVALO_DE_ATUALIZACAO = 6;
 
     //Variáveis de  controle dos movimentos
     protected int proximoPasso = 1;
@@ -20,7 +20,7 @@ abstract class Personagem extends Actor
     protected boolean estaParado = true;
     protected boolean estaParaDireita = true;
     protected boolean estaParaEsquerda = false;
-    protected boolean estaNoIniciDoCenario = false;
+
     /**
      * Marca a posicao atual do personagem dentro do percurso total do cenário
      */
@@ -32,13 +32,13 @@ abstract class Personagem extends Actor
      */
     public void act() 
     {
-        
+
     }
 
     /**
      * Utiliza o valor dos ciclos do cenário para criar o atraso necessário a atualização da sprite de movimento do personagem
      */
-    abstract boolean possoAtualizar();
+    abstract boolean possoAtualizarImagem();
 
     /**
      * Controla os passos do personagem para saber qual deve ser a sprite a se utilizar para representar sua caminhada
@@ -59,7 +59,7 @@ abstract class Personagem extends Actor
      * Gerencia o movimento do pulo desde o inicio(subida) até a sua aterrisagem
      */
     abstract void pulando();
-    
+
     /**
      * Pulo interrompido devido a colisão com um objeto
      */
@@ -71,7 +71,7 @@ abstract class Personagem extends Actor
     public boolean estaIndoPraDireta(){
 
         if(proximoPasso >= 1 && proximoPasso < 7 && estaParaDireita && !estaParado ){
-            //this.aumentaKM();
+
             return true;
         }
         return false;
@@ -83,7 +83,6 @@ abstract class Personagem extends Actor
     public boolean estaIndoPraEsquerda(){
 
         if(proximoPasso >= 7 && proximoPasso < 13 && estaParaEsquerda && !estaParado){
-            //this.diminuiKM();
             return true;
         }
         return false;
@@ -93,11 +92,9 @@ abstract class Personagem extends Actor
      * Atualiza a direção de caminhada do personagem para direita
      */
     public void caminheParaDireita(){
-
         estaParaDireita = true;
         estaParaEsquerda = false;
         estaParado = false;
-
     }
 
     /**
@@ -106,8 +103,7 @@ abstract class Personagem extends Actor
     public void caminheParaEsquerda(){
         estaParaDireita = false;
         estaParaEsquerda = true;
-        if (!estaNoIniciDoCenario)estaParado = false;
-
+        estaParado = false;
     }
 
     /**
@@ -115,6 +111,13 @@ abstract class Personagem extends Actor
      */
     public void fiqueParado(){
         estaParado = true;
+    }
+
+    /**
+     * Faz o personagem voltar a caminhar
+     */
+    public void podeCaminhar(){
+        estaParado = false;
     }
 
     /**
@@ -130,12 +133,9 @@ abstract class Personagem extends Actor
      *  Verifica se o personagem esta no nível do solo
      */
     public boolean estaNoNivelDoSolo(){
-
         int alturaDosPes = alturaDosPes();
-
         if(  alturaDosPes - Mundo1.NIVEL_DO_SOLO == 0 ){
             return true;
-
         }
         return false;
 
@@ -190,11 +190,31 @@ abstract class Personagem extends Actor
     }
 
     /**
+     * Retorna a altura da cabeça do personagem dentro do jogo
+     */
+    public int alturaDaCabeca(){
+        return getY() - getImage().getHeight()/2;
+    }
+
+    /**
+     * Retorna o limite (coordenada X) direito do Personagem
+     */
+    public int limiteDireito(){
+        return getX() + (getImage().getWidth()/2);
+    }
+
+    /**
+     * Retorna o limite (coordenada X) esquerdo do Personagem
+     */
+    public int limiteEsquerdo(){
+        return getX() - (getImage().getWidth()/2);
+    }
+
+    /**
      * Sempre que o personagem vai para direita aumentamos um KM, na sua posicao no percurso total do cenário
      */
     public void aumentaKM(){
         this.KMatual+=4;
-        estaNoIniciDoCenario = false;
     }
 
     /**
@@ -202,7 +222,7 @@ abstract class Personagem extends Actor
      */
     public void diminuiKM(){
         this.KMatual-=4;
-        if(this.KMatual < 1){estaNoIniciDoCenario = true;}
+
     }
 
     /**
@@ -210,15 +230,6 @@ abstract class Personagem extends Actor
      */
     public int KMAtual(){
         return this.KMatual;
-    }
-    
-    
-    /**
-     * Informa ao personagem que ele esta em terra firme
-     */
-    public boolean estaNoIniciDoCenario(){
-       return this.estaNoIniciDoCenario;
-       
     }
 
 }
