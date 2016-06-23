@@ -1,5 +1,6 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.awt.Color;
+import java.awt.Font;
 /**
  * Write a description of class MostrTexto here.
  * 
@@ -15,9 +16,8 @@ public class MostraTexto extends Actor
 
     public void atualiza(String txt){
 
-        //        GreenfootImage img = new GreenfootImage(100,100);
-        //      img.drawString( txt,10, 5);
-        setImage(new GreenfootImage(txt,20,Color.WHITE,Color.RED));
+        GreenfootImage texto = new GreenfootImage(txt,30,Color.WHITE,new Color(0,0,0,0),Color.BLACK);
+        setImage(texto);
 
     }
     
@@ -25,4 +25,18 @@ public class MostraTexto extends Actor
     {
 
     }    
+    
+    public MostraTexto(){}
+    
+    public MostraTexto(String txt){
+        //   GreenfootImage img = new GreenfootImage(txt,25,Color.WHITE,new Color(0,0,0,0),Color.BLACK);
+        GreenfootImage img = new GreenfootImage(70,24);
+        Font font = new Font("Impact", Font.PLAIN, 20);
+        img.setFont(font);
+        img.setColor(new Color(63,151,29)); 
+        img.drawString(txt, 0  ,20);
+        setImage(img);
+    }
+    
+    
 }

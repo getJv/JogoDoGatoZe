@@ -1,0 +1,21 @@
+#BlueJ class context
+comment0.target=Placar
+comment0.text=\r\n\ Classe\ para\ manipular\ o\ placar\ de\ pontua\u00E7\u00E3o\ do\ jogo.\r\n\ \r\n\ @author\ (Jhonatan\ Morais\ -\ jhonatanvinicius@gmail.com\ -\ www.getjv.com.br)\ \r\n\ @version\ (1.0)\r\n
+comment1.params=
+comment1.target=void\ act()
+comment1.text=\r\n\ Act\ -\ do\ whatever\ the\ Placar\ wants\ to\ do.\ This\ method\ is\ called\ whenever\r\n\ the\ 'Act'\ or\ 'Run'\ button\ gets\ pressed\ in\ the\ environment.\r\n
+comment2.params=
+comment2.target=Placar()
+comment3.params=xPontos
+comment3.target=void\ acrescenteMais(int)
+comment3.text=\r\n\ Acrescenta\ a\ nova\ pontua\u00E7\u00E3o\ ao\ placar\r\n
+comment4.params=pontos
+comment4.target=java.lang.String\ convertePontuacao(int)
+comment4.text=\r\n\ Converte\ um\ numero\ para\ o\ formato\ string\ e\ acrescenta\ zeros\ a\ esquerda\ deste,\ quando\ necess\u00E1rio\r\n
+comment5.params=txt
+comment5.target=void\ atualizaImagem(java.lang.String)
+comment5.text=\r\n\ Atualiza\ o\ novo\ valor\ no\ objeto\ Placar\r\n
+comment6.params=
+comment6.target=void\ atualizaPontuacao()
+comment6.text=\r\n\ Atualiza\ a\ pontua\u00E7\u00E3o\ do\ placar\r\n
+numComments=7

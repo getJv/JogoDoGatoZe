@@ -49,6 +49,7 @@ public class Mundo1 extends World
     private Gato ze;
     private Objeto plataforma;
     private MostraTexto mt;
+    private Placar placar;
 
     /**
      * Contrutor do cenário.
@@ -71,12 +72,18 @@ public class Mundo1 extends World
         addObject(ze, POSICAO_INICIAL_PERSONAGEM, alturaInicialDoSolo(ze));
         Pisoteria piso = new Pisoteria(100,1);
         addObject(piso, 350, alturaInicialDoSolo(piso));
+        addObject(new Moedaria(), 350, 300);
 
         //Coloca o objeto que mostra valores na tela
         mt = new MostraTexto();
-        addObject(mt, 100,10);
+        //addObject(mt, 100,10);
 
-        //prepare();
+        placar = new Placar();
+        addObject(new MostraTexto("Gato Zé"), 45,17);
+        addObject(placar, 45 ,39);
+
+        
+        prepare();
     }
 
     /**
@@ -113,7 +120,7 @@ public class Mundo1 extends World
         verificarLimitesDoCenario();
         contaCiclo();
         aplicarForcaDaGravidade();
-        mt.atualiza(Integer.toString(ze.KMAtual()) );
+        //mt.atualiza(Integer.toString(ze.KMAtual()) );
     }
 
     /**
@@ -332,4 +339,32 @@ public class Mundo1 extends World
 
     }
 
+    /**
+     * Retorna um instancia do placar utilizada pelo mundo
+     */
+    public Placar getPlacar(){
+        return placar;
+    }
+
+    /**
+     * Prepara o mundo para o início do programa.
+     * Ou seja: criar os objetos iniciais e adicioná-los ao mundo.
+     */
+    private void prepare()
+    {
+        Moedaria moedaria = new Moedaria();
+        addObject(moedaria,185,254);
+        Moedaria moedaria2 = new Moedaria();
+        addObject(moedaria2,507,316);
+        Moedaria moedaria3 = new Moedaria();
+        addObject(moedaria3,617,307);
+        Moedaria moedaria4 = new Moedaria();
+        addObject(moedaria4,461,253);
+        Moedaria moedaria5 = new Moedaria();
+        addObject(moedaria5,312,223);
+        Moedaria moedaria6 = new Moedaria();
+        addObject(moedaria6,113,330);
+        Moedaria moedaria7 = new Moedaria();
+        addObject(moedaria7,90,247);
+    }
 }

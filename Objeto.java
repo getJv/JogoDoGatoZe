@@ -8,8 +8,8 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 abstract class Objeto extends Actor
 {
-    private  Personagem personagem; // Guarda o personagem que é utilizado em toda a classe
-    private  Mundo1 mundo; // Guarda o mundo que é utilizado em toda a classe
+    protected  Personagem personagem; // Guarda o personagem que é utilizado em toda a classe
+    protected  Mundo1 mundo; // Guarda o mundo que é utilizado em toda a classe
     public static final int  LIMITE_DA_COLISAO = 9; // limita o limite da quina do objeto para que o personagem 'toque' e se considere como colisão
     protected int tamanho; //Guarda o tamanho desejado para o objeto
     protected int filetaInicial; //Guarda a posição inicial para desenho da nova imagem do objeto 
@@ -26,29 +26,7 @@ abstract class Objeto extends Actor
     public void act() 
     {
         mundo = (Mundo1) getWorld();
-        if(temAlguemAqui()  ){
-            bloqueiaLadoEsquerdo();
-            bloqueiaLadoDireito();
-            bloqueiaQueda(); 
-            bloqueiaFundo(); 
-        }else{
-            mundo.oCenarioPodeAtualizar();
-        }
     } 
-
-    /**
-     * Realiza a bloqueio da passagem do ator pelo lado esquerdo do objeto.
-     */
-    protected void bloqueiaLadoEsquerdo(){
-        if(personagem.estaIndoPraDireta()){
-            if( houveColisaoDoLadoEsquerdo() && !oPersonagemEstaAcimaDoObjeto() && !estaSobMeuPerimetro() ){
-                mundo.oCenarioNaoPodeAtualizar();
-                personagem.fiqueParado();
-            }
-        }else{
-            mundo.oCenarioPodeAtualizar();
-        }
-    }
 
     /**
      * Confirma se houve de fato a colisão pelo lado esquerdo do objeto.
@@ -95,38 +73,12 @@ abstract class Objeto extends Actor
 
     }
 
-    /**
-     * Realiza a bloqueio da passagem do ator pelo lado direito do objeto.
-     */
-    protected void bloqueiaLadoDireito(){
-        if (personagem.estaIndoPraEsquerda()){
-            if(  houveColisaoDoLadoDireito () && !oPersonagemEstaAcimaDoObjeto() && !estaSobMeuPerimetro() ){
-                mundo.oCenarioNaoPodeAtualizar();
-                personagem.fiqueParado();
-            }
-        }else{
-            mundo.oCenarioPodeAtualizar();
-
-        }
-    }
-
+    
     /**
      * Confirma se houve de fato a colisão pelo lado direito do objeto.
      */
     public boolean houveColisaoDoLadoDireito(){
         return (limiteDireitoDoObjeto() - personagem.limiteEsquerdo()) < LIMITE_DA_COLISAO;
-    }
-
-    /**
-     * Realiza a colisão topo-fundo para impedir o avanço através do objeto
-     */
-    protected void bloqueiaQueda(){
-        if( estaSobMeuPerimetro() && houveColisaoDoLadoDeCima()){
-            int novaAltura =  personagem.getY() - Mundo1.FORCA_DA_GRAVIDADE ; 
-            personagem.setLocation(personagem.getX(),novaAltura);
-            personagem.estaEmTerraFirme(); 
-        }
-
     }
 
     /**
@@ -136,17 +88,7 @@ abstract class Objeto extends Actor
         return ((personagem.alturaDosPes() - limiteDoTopoDoObjeto() ) <= LIMITE_DA_COLISAO  );
     }
 
-    /**
-     * Realiza a colisão fundo-cabeça para impedir o avanço através do objeto de baixo para cima
-     */
-    protected void bloqueiaFundo(){
-        if( estaSobMeuPerimetro() && houveColisaoDoLadoDeBaixo()){
-            int novaAltura =  personagem.getY() + Mundo1.FORCA_DA_GRAVIDADE; 
-            personagem.setLocation(personagem.getX(),novaAltura);
-            personagem.interromperPulo();
-        }
-    }
-
+    
     /**
      * Confirma se houve de fato a colisão pelo lado de baixo (base) do objeto.
      */
@@ -157,7 +99,7 @@ abstract class Objeto extends Actor
     /**
      * Verifica se o ator que colidiu esta dentro dos limites do objeto
      */
-    private boolean estaSobMeuPerimetro(){
+    public boolean estaSobMeuPerimetro(){
 
         int limiteEsquerdoDoObjeto = limiteEsquerdoDoObjeto() + LIMITE_DA_COLISAO; // Mais a margem limite de colisão
         int limiteDireitoDoObjeto  = limiteDireitoDoObjeto() - LIMITE_DA_COLISAO;  // menos a margem limite de colisão
@@ -235,35 +177,21 @@ abstract class Objeto extends Actor
     public void definirFiletaInicial(int proximaFileta){     
         this.filetaInicial = proximaFileta;
     }
-
+    /**
+     * Define de fato a imagem do objeto
+     */
     protected void criar(){
-
         setImage(desenhar());
     }
-
-    public void redesenhar(int tamanho,int posicaoInicial){
-        definirTamanho(tamanho);
-        definirPosicaoInicial(posicaoInicial);
-        setImage(desenhar());
-    }
-
-    protected GreenfootImage desenhar(){
-
-        GreenfootImage novoPiso = new GreenfootImage(pegarTamanho(),alturaDaFileta); 
-        int posicaoDaNovaFileta = 0; 
-        int filetaAtual = this.filetaInicial; 
-        while(posicaoDaNovaFileta < novoPiso.getWidth()){ 
-            if(filetaAtual > quantidadeDeFiletas){ 
-                filetaAtual = 1; 
-            }else if(filetaAtual < 1){
-                filetaAtual = quantidadeDeFiletas;
-            }
-            novoPiso.drawImage(new GreenfootImage(nomeDoArquivo + filetaAtual + extensaoDoArquivo), posicaoDaNovaFileta, 0); 
-            filetaAtual++; 
-            posicaoDaNovaFileta += larguraDaFileta; 
-        }
-        return novoPiso;
-
-    }
+    
+    /**
+     * Redesenha a imagem que será atualizada no objeto para dar ideia de movimento do mesmo junto ao movimento do cenário
+     */
+    abstract void redesenhar(int tamanho,int posicaoInicial);
+    
+    /**
+     * Define a solução para criar a imagem que será renderizada
+     */
+    abstract GreenfootImage desenhar();
 
 }
