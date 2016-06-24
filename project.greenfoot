@@ -1,5 +1,5 @@
 #Greenfoot properties
-#Thu Jun 23 17:51:24 BRT 2016
+#Fri Jun 24 17:18:19 BRT 2016
 editor.fx.0.height=700
 target2.width=100
 target8.name=Moedaria
@@ -96,6 +96,7 @@ mainWindow.x=-1288
 editor.swing.0.x=-8
 target5.showInterface=false
 dependency16.to=Moedaria
+class.Roteiro.superclass=greenfoot.Actor
 dependency5.from=Objeto
 target8.showInterface=false
 class.Instrucoes.image=instru.jpg
@@ -181,7 +182,7 @@ target8.width=80
 target13.height=50
 dependency8.to=Mundo1
 class.linhaHorizontal.superclass=greenfoot.Actor
-simulation.speed=48
+simulation.speed=49
 target9.width=80
 target7.height=50
 dependency5.type=UsesDependency
@@ -202,6 +203,7 @@ target4.width=100
 class.MostraTexto.superclass=greenfoot.Actor
 target8.typeParameters=
 dependency7.from=Mundo1
+class.Elenco.superclass=greenfoot.Actor
 target5.width=90
 dependency4.to=Personagem
 class.Gato.superclass=Personagem

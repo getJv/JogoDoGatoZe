@@ -98,6 +98,7 @@ public class Pisoteria extends Objeto
      * Redesenha a imagem que será atualizada no objeto para dar ideia de movimento do mesmo junto ao movimento do cenário
      */
     public void redesenhar(int tamanho,int posicaoInicial){
+        
         definirTamanho(tamanho);
         definirPosicaoInicial(posicaoInicial);
         setImage(desenhar());

@@ -23,7 +23,9 @@ public class Linha extends Pisoteria
     {
         super.act();
         
-    }    
+        
+    }
     
+     
     
 }

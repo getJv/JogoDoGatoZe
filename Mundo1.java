@@ -43,6 +43,12 @@ public class Mundo1 extends World
      * Informa se o cenário pode ou não ser atualizado
      */
     private boolean oCenarioPodeAtualizar = true;
+    
+    /**
+     * Marca o ultimo pixel que foi renderizado no cenario
+     */
+    public int colunaRenderizada = 0;
+    
 
     //Objetos vivos do Jogo
     private GreenfootImage cenarioInicial;
@@ -50,6 +56,7 @@ public class Mundo1 extends World
     private Objeto plataforma;
     private MostraTexto mt;
     private Placar placar;
+    private Roteiro roteiro;
 
     /**
      * Contrutor do cenário.
@@ -60,6 +67,8 @@ public class Mundo1 extends World
         super(LARGURA_CENARIO, ALTURA_CENARIO, 1); //Medidas do nosso cenário
         cenarioInicial = new GreenfootImage(IMAGEM_INICIAL_MUNDO1); //Crio a imagem inicial do cenário
         setBackground(cenarioInicial); //Coloco a imagem inicial dentro do nosso cenário
+        
+        roteiro = new Roteiro();
 
         //Crio os Objetos vivos
         ze = new  Gato();
@@ -70,8 +79,8 @@ public class Mundo1 extends World
         addObject(instrucoes, 602, 80);
 
         addObject(ze, POSICAO_INICIAL_PERSONAGEM, 300);
-        Pisoteria piso = new Pisoteria(500,1);
-        addObject(piso, 350, alturaInicialDoSolo(piso));
+        //Pisoteria piso = new Pisoteria(200,1);
+        //addObject(piso, 350, alturaInicialDoSolo(piso));
         addObject(new Moedaria(), 350, 300);
 
         //Coloca o objeto que mostra valores na tela
@@ -162,10 +171,14 @@ public class Mundo1 extends World
     private void adiantaFilme(){
 
         if(ze.estaIndoPraDireta()){
-            this.quadroAtual += VELOCIDADE_ATUALIZACAO_QUADROS;
+            if(getCiclo() % 2 == 0){ //// EXperimental do paralax 
+                this.quadroAtual += VELOCIDADE_ATUALIZACAO_QUADROS;
+            }
             ze.aumentaKM();
         }else{
-            this.quadroAtual -= VELOCIDADE_ATUALIZACAO_QUADROS;
+            if(getCiclo() % 2 == 0){ //// EXperimental do paralax
+                this.quadroAtual -= VELOCIDADE_ATUALIZACAO_QUADROS;
+            }
             ze.diminuiKM();
         }
 
@@ -214,32 +227,29 @@ public class Mundo1 extends World
 
     /**
      * Metodo temporário para teste de movimento
-     */
-    private void retirarObjetoDaCena(Objeto objeto){
-
-        if(objeto.getX() == 0) {
-
-            if(objeto.pegarTamanho() - 4 < 1){
-
-                Pisoteria p = new Pisoteria();
-                addObject(p, LARGURA_CENARIO, objeto.getY());
-                removeObject(objeto);
-            }else{
-                objeto.redesenhar(objeto.pegarTamanho() - 4, objeto.pegarFiletaInicial()+1); // criar metodo especifico no Objeto
+     
+        private void retirarObjetoDaCena(Objeto objeto){
+    
+            if(objeto.getX() == 0) {
+    
+                //if(objeto.pegarTamanho() - 4 < 1){
+    
+                //    removeObject(objeto);
+                //}else{
+                   // objeto.redesenhar(objeto.pegarTamanho() + 4, objeto.pegarFiletaInicial()+1); // criar metodo especifico no Objeto
+                //}
+    
+            }else if(objeto.getX() == LARGURA_CENARIO-1) {
+    
+                //if(objeto.pegarTamanho() - 4 < 1){
+                  //  removeObject(objeto);
+                //}else{
+                   // objeto.redesenhar(objeto.pegarTamanho() - 4, objeto.pegarFiletaInicial()-1);// criar metodo especifico no Objeto
+                //}
+    
             }
-
-        }else if(objeto.getX() == LARGURA_CENARIO-1) {
-
-            if(objeto.pegarTamanho() - 4 < 1){
-                Pisoteria p = new Pisoteria();
-                addObject(p, 0, objeto.getY());
-                removeObject(objeto);
-            }else{
-                objeto.redesenhar(objeto.pegarTamanho() - 4, objeto.pegarFiletaInicial()-1);// criar metodo especifico no Objeto
-            }
-
         }
-    }
+    */
 
     /**
      * Atualizo a posição dos objetos do jogo sempre que a cena for atualizada, se o herói foi pra direita a posição do objeto diminui, se para esquerda avança
@@ -251,13 +261,13 @@ public class Mundo1 extends World
         if(ze.estaIndoPraDireta() && oCenarioPodeAtualizar){
             for(Objeto objeto : objetosDoCenario){
                 objeto.move(TAMANHO_DO_QUADRO * -1);
-                retirarObjetoDaCena( objeto);
+               // retirarObjetoDaCena( objeto);
             }
         }
         if(ze.estaIndoPraEsquerda() && oCenarioPodeAtualizar){
             for(Objeto objeto : objetosDoCenario){
                 objeto.move(TAMANHO_DO_QUADRO );
-                retirarObjetoDaCena(objeto);
+               // retirarObjetoDaCena(objeto);
             }
         }
 
@@ -327,14 +337,15 @@ public class Mundo1 extends World
      * Verifica se o personagem esta no inicio ou fim do cenário, se estiver ele coloca um objeto para impedir o avanço do personagem além desses limites
      */
     private void verificarLimitesDoCenario(){
-        if(ze.KMAtual() < 0){
-            if(getObjects(Linha.class).isEmpty()){
-                addObject(new Linha(), 0, alturaInicialDoSolo(new Linha()));
-            }
-        }else if(ze.KMAtual() > TAMANHO_DO_MUNDO1){
-            if(getObjects(Linha.class).isEmpty()){
-                addObject(new Linha(), LARGURA_CENARIO, alturaInicialDoSolo(new Linha()));
-            }
+        if(ze.KMAtual() < 0 && getObjects(Linha.class).isEmpty()){
+            addObject(new Linha(), 0, alturaInicialDoSolo(new Linha()));
+        }
+        
+        
+         if(ze.KMAtual() > TAMANHO_DO_MUNDO1 && getObjects(Linha.class).isEmpty()){
+           
+           addObject(new Linha(), LARGURA_CENARIO, alturaInicialDoSolo(new Linha()));
+           
         }
 
     }
