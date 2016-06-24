@@ -70,7 +70,7 @@ public class Mundo1 extends World
         addObject(instrucoes, 602, 80);
 
         addObject(ze, POSICAO_INICIAL_PERSONAGEM, 300);
-        Pisoteria piso = new Pisoteria(700,1);
+        Pisoteria piso = new Pisoteria(500,1);
         addObject(piso, 350, alturaInicialDoSolo(piso));
         addObject(new Moedaria(), 350, 300);
 
