@@ -69,8 +69,8 @@ public class Mundo1 extends World
         //criaSolo();
         addObject(instrucoes, 602, 80);
 
-        addObject(ze, POSICAO_INICIAL_PERSONAGEM, alturaInicialDoSolo(ze));
-        Pisoteria piso = new Pisoteria(100,1);
+        addObject(ze, POSICAO_INICIAL_PERSONAGEM, 300);
+        Pisoteria piso = new Pisoteria(700,1);
         addObject(piso, 350, alturaInicialDoSolo(piso));
         addObject(new Moedaria(), 350, 300);
 
@@ -83,7 +83,7 @@ public class Mundo1 extends World
         addObject(placar, 45 ,39);
 
         
-        prepare();
+       // prepare();
     }
 
     /**
@@ -366,5 +366,11 @@ public class Mundo1 extends World
         addObject(moedaria6,113,330);
         Moedaria moedaria7 = new Moedaria();
         addObject(moedaria7,90,247);
+        moedaria6.setLocation(185,216);
+        moedaria7.setLocation(220,234);
+        moedaria5.setLocation(327,215);
+        moedaria4.setLocation(360,221);
+        moedaria2.setLocation(435,182);
+        moedaria3.setLocation(479,181);
     }
 }

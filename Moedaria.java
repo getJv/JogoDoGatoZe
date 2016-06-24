@@ -1,20 +1,35 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class Moedaria here.
+ * Classe manipulação das moedas do jogo
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author  (Jhonatan Morais - jhonatanvinicius@gmail.com or jhonatan@dfjug.org) 
+ * @version (1.0)
  */
 public class Moedaria extends Objeto
 {
     public static final int INTERVALO_DE_ATUALIZACAO = 8;
     public static final int VALOR_PONTO_MOEDA = 100;
+    private int proximaImagem = 2;
 
     public Moedaria(){
-
+        definirTamanho(30);
         definirFiletaInicial(1);
+        definirArquivoDaImagem("objetos/coin/coin_",".png");
+        definirLarguraDaFileta(4);
+        definirAlturaDaFileta(31);
+        definirQuantidadeDeFiletas(45);
+        criar();
+    }
 
+    public Moedaria(int tamanho,int posicaoInicial){
+        definirTamanho(tamanho);
+        definirFiletaInicial(posicaoInicial);
+        definirArquivoDaImagem("objetos/coin/coin_",".png");
+        definirLarguraDaFileta(4);
+        definirAlturaDaFileta(31);
+        definirQuantidadeDeFiletas(45);
+        criar();
     }
 
     /**
@@ -24,21 +39,34 @@ public class Moedaria extends Objeto
     public void act() 
     {
         super.act();
+        rodaMoeda();
+        contabilizaMoeda();
+
+    }
+    /**
+     * Gira a imagem da moeda
+     */
+    public void rodaMoeda(){
         if(possoAtualizarImagem()){
-            setImage( new GreenfootImage("objetos/coin/coin_"+filetaInicial+".png"));
-            filetaInicial++;
-        }
-        if(filetaInicial >= 6){
-            definirFiletaInicial(1);
+            setImage(new GreenfootImage("/objetos/coin/split_coin/coin_" + proximaImagem + ".png"));
+            proximaImagem++;
         }
 
+        if(proximaImagem > 6){
+            proximaImagem = 1;
+        }
+
+    }
+
+    /**
+     * Gerencia quando o personagem captura a moeda
+     */
+    public void contabilizaMoeda(){
         if(temAlguemAqui()){
             mundo.removeObject(this);
             mundo.getPlacar().acrescenteMais(VALOR_PONTO_MOEDA);
-            
         }
 
-        
     }
 
     /**
@@ -80,14 +108,6 @@ public class Moedaria extends Objeto
         return novoPiso;
 
     }
-    
-    
-    
-    
-    
-   
 
-    
-    
     
 }
