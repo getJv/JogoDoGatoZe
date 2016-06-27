@@ -21,10 +21,7 @@ abstract class Personagem extends Actor
     protected boolean estaParaDireita = true;
     protected boolean estaParaEsquerda = false;
 
-    /**
-     * Marca a posicao atual do personagem dentro do percurso total do cenário
-     */
-    public int KMatual = 0;
+    
 
     /**
      * Act - do whatever the Personagens wants to do. This method is called whenever
@@ -210,26 +207,5 @@ abstract class Personagem extends Actor
         return getX() - (getImage().getWidth()/2);
     }
 
-    /**
-     * Sempre que o personagem vai para direita aumentamos um KM, na sua posicao no percurso total do cenário
-     */
-    public void aumentaKM(){
-        this.KMatual+=4;
-    }
-
-    /**
-     * Sempre que o personagem vai para esquerda diminuimos um KM, na sua posicao no percurso total do cenário
-     */
-    public void diminuiKM(){
-        this.KMatual-=4;
-
-    }
-
-    /**
-     * Retorna a posicao atual do personagem dentro do tamanho do cenário
-     */
-    public int KMAtual(){
-        return this.KMatual;
-    }
-
+    
 }

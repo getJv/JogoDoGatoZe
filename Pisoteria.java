@@ -10,7 +10,7 @@ public class Pisoteria extends Objeto
 {
 
     public Pisoteria(){
-        definirTamanho(100);
+        definirTamanho(4);
         definirFiletaInicial(1);
         definirArquivoDaImagem("objetos/piso/piso_",".png");
         definirLarguraDaFileta(4);
@@ -98,10 +98,11 @@ public class Pisoteria extends Objeto
      * Redesenha a imagem que será atualizada no objeto para dar ideia de movimento do mesmo junto ao movimento do cenário
      */
     public void redesenhar(int tamanho,int posicaoInicial){
-        
+        /*
         definirTamanho(tamanho);
         definirPosicaoInicial(posicaoInicial);
         setImage(desenhar());
+        */
     }
 
     /**
