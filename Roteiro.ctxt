@@ -1,0 +1,24 @@
+#BlueJ class context
+comment0.target=Roteiro
+comment0.text=\r\n\ Write\ a\ description\ of\ class\ Roteiro\ here.\r\n\ \r\n\ @author\ (your\ name)\ \r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
+comment1.params=
+comment1.target=void\ act()
+comment1.text=\r\n\ Act\ -\ do\ whatever\ the\ Roteiro\ wants\ to\ do.\ This\ method\ is\ called\ whenever\r\n\ the\ 'Act'\ or\ 'Run'\ button\ gets\ pressed\ in\ the\ environment.\r\n
+comment2.params=mundoAtual
+comment2.target=Roteiro(greenfoot.World)
+comment3.params=pontoDeEntrada\ x\ y\ nomeDaClasseDoAtor
+comment3.target=void\ adicionaElenco(int,\ int,\ int,\ java.lang.String)
+comment3.text=\r\n\ Cadastras\ os\ atores\ o\ o\ ponto\ de\ entrada\ em\ que\ participar\u00E3o\ no\ cen\u00E1rio\r\n
+comment4.params=quadro
+comment4.target=boolean\ temNovoAtor(int)
+comment4.text=\r\n\ Verifica\ se\ no\ quadro\ atual\ deve\ entrar\ algum\ ator\ em\ cena\r\n
+comment5.params=quadro
+comment5.target=void\ coloqueOsAtoresEmAcao(int)
+comment5.text=\r\n\ Verifica\ e\ adiciona\ os\ atores\ que\ devem\ entrar\ em\ cena\r\n
+comment6.params=pontoInicial\ pontoFinal
+comment6.target=void\ addPiso(int,\ int)
+comment7.params=
+comment7.target=void\ tiraPiso()
+comment8.params=pontoInicial
+comment8.target=void\ criaPiso(int)
+numComments=9
