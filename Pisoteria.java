@@ -8,7 +8,8 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class Pisoteria extends Objeto
 {
-
+    
+    
     public Pisoteria(){
         definirTamanho(4);
         definirFiletaInicial(1);
@@ -31,6 +32,7 @@ public class Pisoteria extends Objeto
 
     public void act() 
     {
+
         super.act();
         if(temAlguemAqui()  ){
             bloqueiaLadoEsquerdo();
@@ -40,6 +42,7 @@ public class Pisoteria extends Objeto
         }else{
             mundo.oCenarioPodeAtualizar();
         }
+
     }
 
     /**
@@ -93,19 +96,41 @@ public class Pisoteria extends Objeto
         }
 
     }
-
     /**
+     * Faz com que o tamanho e imagem do piso seja atualizada, criando assim a ideia de movimento
+     */
+    protected void saiaDeCenaPelaEsquerda(){
+       
+        if(limiteEsquerdoDoObjeto() <= 0){
+            redesenhar(pegarTamanho() - 4,  pegarProximaFileta() );
+        }
+
+    }
+    
+    /**
+     * Faz com que o tamanho e imagem do piso seja atualizada, criando assim a ideia de movimento
+     */
+    protected void saiaDeCenaPelaDireita(){
+       
+        if(limiteDireitoDoObjeto() >= 699 ){
+            redesenhar(pegarTamanho() - 4,  pegarFiletaInicial());
+        }
+
+    }
+    
+    /** 
      * Redesenha a imagem que será atualizada no objeto para dar ideia de movimento do mesmo junto ao movimento do cenário
      */
     public void redesenhar(int tamanho,int posicaoInicial){
-        /*
+
+        if(tamanho < 0) {tamanho =1;}
         definirTamanho(tamanho);
-        definirPosicaoInicial(posicaoInicial);
+        definirFiletaInicial(posicaoInicial);
         setImage(desenhar());
-        */
+
     }
 
-    /**
+    /** 
      * Define a solução para criar a imagem que será renderizada
      */
     protected GreenfootImage desenhar(){
@@ -113,6 +138,7 @@ public class Pisoteria extends Objeto
         GreenfootImage novoPiso = new GreenfootImage(pegarTamanho(),alturaDaFileta); 
         int posicaoDaNovaFileta = 0; 
         int filetaAtual = this.filetaInicial; 
+
         while(posicaoDaNovaFileta < novoPiso.getWidth()){ 
             if(filetaAtual > quantidadeDeFiletas){ 
                 filetaAtual = 1; 

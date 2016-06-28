@@ -21,6 +21,7 @@ public class Mundo1 extends World
     public static final int     POSICAO_INICIAL_PERSONAGEM = 250;
     public static final double  VELOCIDADE_ATUALIZACAO_QUADROS = 1;
     public static final int     TAMANHO_DO_MUNDO1 = 700 * 4; // Largura do cenário vezes 4
+    public static final int     TAXA_INTERVALO_DE_ATUALIZACAO = 6;
 
     //Constantes da Natureza do mundo
     public static final int     LARGURA_CENARIO = 700;
@@ -87,29 +88,29 @@ public class Mundo1 extends World
 
         //Pisoteria piso = new Pisoteria(200,1);
         //addObject(new Pisoteria(200,1), 350, 363);
-        
+
         //addObject(new Pisoteria(200,1), 760, 363);
-        
+
         //addObject(new Pisoteria(200,1), 1000, 363);
-        
+
         //addObject(new Moedaria(), 350, 300);
-        
-        roteiro.addPiso(0,500);
-        //roteiro.addPiso(450,550);
+
+        roteiro.addPiso(0,350);
+        //roteiro.addPiso(400,700);
         //roteiro.addPiso(400,500);
-        roteiro.criaPiso(KMatual); 
+        roteiro.criaPiso(0); 
 
         //Coloca o objeto que mostra valores na tela
         mt = new MostraTexto();
         addObject(mt, 250,10);
-        
+
         //int t = 0;
-       // while(t < 300){
-          //  Pisoteria piso = new Pisoteria();
-         //   addObject(piso, t, alturaInicialDoSolo(piso));
-         //  t+=4;
+        // while(t < 300){
+        //  Pisoteria piso = new Pisoteria();
+        //   addObject(piso, t, alturaInicialDoSolo(piso));
+        //  t+=4;
         //}
-        
+
         placar = new Placar();
         addObject(new MostraTexto("Gato Zé"), 45,17);
         addObject(placar, 45 ,39);
@@ -141,23 +142,22 @@ public class Mundo1 extends World
      */
     public void act() 
     {
+
+        if(roteiro.temNovoAtor(KMAtual())){
+            roteiro.coloqueOsAtoresEmAcao(KMAtual());
+        }
+
+        roteiro.removaOsAtoresDoCenario();
         //valido se o cenário deve ou não ser atualizado com a proxima cena
         if(ze.estaIndoPraDireta() || ze.estaIndoPraEsquerda()  ){
             projetor( proximaCena()); 
-            atualizaObjetosdoCenario();
+            roteiro.atualizaObjetosPeloCenario();
 
         } 
-        //criaSolo();
         verificarLimitesDoCenario();
         contaCiclo();
-        boolean tt = roteiro.temNovoAtor(KMAtual()); 
 
-        if(tt){
-
-            roteiro.coloqueOsAtoresEmAcao(KMAtual());
-        }
         mt.atualiza("quadro: " + Integer.toString(KMAtual()) );
-        roteiro.criaPiso(KMAtual());
         aplicarForcaDaGravidade();
 
     }
@@ -201,19 +201,26 @@ public class Mundo1 extends World
     private void adiantaFilme(){
 
         if(ze.estaIndoPraDireta()){
-            if(getCiclo() % 2 == 0){ //// EXperimental do paralax 
+            if(getCiclo() % TAXA_INTERVALO_DE_ATUALIZACAO == 0){ //// EXperimental do paralax para o fundo
                 this.quadroAtual += VELOCIDADE_ATUALIZACAO_QUADROS;
             }
             aumentaKM();
-            //roteiro.criaPiso(KMAtual());
         }else{
-            if(getCiclo() % 2 == 0){ //// EXperimental do paralax
+            if(getCiclo() % TAXA_INTERVALO_DE_ATUALIZACAO == 0){ //// EXperimental do paralax
                 this.quadroAtual -= VELOCIDADE_ATUALIZACAO_QUADROS;
             }
             diminuiKM();
-            //roteiro.criaPiso(KMAtual());
         }
 
+    }
+    /**
+     * Retorna verdadeiro para informar que o fundo do cenário pode atualizar. 
+     * É recomendavel que a taxa de atualização do mundo seja sempre maior que a taxa de atualização dos demais objetos do cenário para dar a 'impressão' que
+     * o que está no fundo sem move mais vagarozamente do que o que esta na frente. veja mais em: https://pt.wikipedia.org/wiki/Paralaxe
+     */
+    public boolean podeMoverOFundo()
+    {
+        return getCiclo() % TAXA_INTERVALO_DE_ATUALIZACAO == 0;
     }
 
     /**
@@ -248,9 +255,8 @@ public class Mundo1 extends World
 
     /**
      * Retorna todos os objetos do cenário que deve ser atualizados conforme a movimentaçao do personagem
-     * OBS: no futuro poderá retor nar apenas a classe Objeto que assim ja deve resolver... vamos ver
      */
-    private ArrayList<Objeto> getObjetosDoCenario(){
+    protected ArrayList<Objeto> getObjetosDoCenario(){
         ArrayList<Objeto> listaDeObjetos = new ArrayList<Objeto>();
         listaDeObjetos.addAll( getObjects(Objeto.class));
         return listaDeObjetos;
@@ -283,27 +289,6 @@ public class Mundo1 extends World
     }
      */
 
-    /**
-     * Atualizo a posição dos objetos do jogo sempre que a cena for atualizada, se o herói foi pra direita a posição do objeto diminui, se para esquerda avança
-     */
-    private void atualizaObjetosdoCenario(){
-
-        ArrayList<Objeto> objetosDoCenario = getObjetosDoCenario();
-
-        if(ze.estaIndoPraDireta() && oCenarioPodeAtualizar){
-            for(Objeto objeto : objetosDoCenario){
-                objeto.move(TAMANHO_DO_QUADRO * -1);
-                // retirarObjetoDaCena( objeto);
-            }
-        }
-        if(ze.estaIndoPraEsquerda() && oCenarioPodeAtualizar){
-            for(Objeto objeto : objetosDoCenario){
-                objeto.move(TAMANHO_DO_QUADRO );
-                // retirarObjetoDaCena(objeto);
-            }
-        }
-
-    }
 
     /**
      * Solicita ao cenário para parar de atualizar sua movimentação
@@ -328,9 +313,24 @@ public class Mundo1 extends World
 
     }
 
+    /**
+     * retorna verdadeiro se o cenário pode
+     */  
+    public boolean possoAtualizarCenario(){
+
+        return oCenarioPodeAtualizar;
+
+    }
+
     public void oCenarioNaoPodeAtualizar(){
 
         oCenarioPodeAtualizar = false;
+
+    }
+
+    public Gato oHeroi(){
+
+        return ze;
 
     }
 
@@ -377,6 +377,7 @@ public class Mundo1 extends World
             addObject(new Linha(), LARGURA_CENARIO, alturaInicialDoSolo(new Linha()));
         }
     }
+
     /**
      * Retorna um instancia do placar utilizada pelo mundo
      */
@@ -406,7 +407,6 @@ public class Mundo1 extends World
         return this.KMatual;
     }
 
-    
     /**
      * Prepara o mundo para o início do programa.
      * Ou seja: criar os objetos iniciais e adicioná-los ao mundo.

@@ -166,17 +166,37 @@ abstract class Objeto extends Actor
         this.tamanho = novoTamanho;
     }
 
-    public void definirPosicaoInicial(int proximaFileta){     
-        this.filetaInicial = proximaFileta;
-    }
-
+    
     public int pegarFiletaInicial(){
         return this.filetaInicial;
+    }
+    
+    /**
+     * Retorna a proxima fileta para renderização da imagem
+     */
+    public int pegarProximaFileta(){
+        int proximaFileta = ++this.filetaInicial;
+        if(proximaFileta > quantidadeDeFiletas) { 
+            proximaFileta = 1;
+        }
+        return proximaFileta;
+    }
+    
+    /**
+     * Retorna a fileta anterior para renderização da imagem
+     */
+    public int pegarFiletaAnterior(){
+        int proximaFileta = --this.filetaInicial;
+        if(proximaFileta < 1) { 
+            proximaFileta = quantidadeDeFiletas;
+        }
+        return proximaFileta;
     }
 
     public void definirFiletaInicial(int proximaFileta){     
         this.filetaInicial = proximaFileta;
     }
+    
     /**
      * Define de fato a imagem do objeto
      */

@@ -83,7 +83,7 @@ public class Moedaria extends Objeto
      */
     public void redesenhar(int tamanho,int posicaoInicial){
         definirTamanho(tamanho);
-        definirPosicaoInicial(posicaoInicial);
+        definirFiletaInicial(posicaoInicial);
         setImage(desenhar());
     }
 
