@@ -11,7 +11,7 @@ abstract class Personagem extends Actor
     //Constantes do Personagem
     public static final int ALTURA_DO_PULO = 20; 
     public static final int INTERVALO_DE_ATUALIZACAO = 6;
-
+    
     //Variáveis de  controle dos movimentos
     protected int proximoPasso = 1;
     protected int alturaAtualDoPulo = 0;
@@ -20,7 +20,8 @@ abstract class Personagem extends Actor
     protected boolean estaParado = true;
     protected boolean estaParaDireita = true;
     protected boolean estaParaEsquerda = false;
-
+    protected Mundo1 mundo;
+    
     
 
     /**
@@ -30,6 +31,14 @@ abstract class Personagem extends Actor
     public void act() 
     {
 
+    }
+    /**
+     * Retorna uma instancia do mundo 
+     */
+    public Mundo1 oMundo(){
+    
+        return (Mundo1) getWorld();
+    
     }
 
     /**

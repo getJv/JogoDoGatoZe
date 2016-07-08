@@ -63,8 +63,8 @@ public class Moedaria extends Objeto
      */
     public void contabilizaMoeda(){
         if(temAlguemAqui()){
-            mundo.removeObject(this);
-            mundo.getPlacar().acrescenteMais(VALOR_PONTO_MOEDA);
+            oMundo().removeObject(this);
+            oMundo().getPlacar().acrescenteMais(VALOR_PONTO_MOEDA);
         }
 
     }
@@ -75,7 +75,7 @@ public class Moedaria extends Objeto
 
     protected boolean possoAtualizarImagem(){
 
-        return mundo.getCiclo() % INTERVALO_DE_ATUALIZACAO  == 0;
+        return oMundo().getCiclo() % INTERVALO_DE_ATUALIZACAO  == 0;
     }
 
     /**
@@ -109,5 +109,6 @@ public class Moedaria extends Objeto
 
     }
 
-    
+    public void moveSeParaEsquerda(){}
+    public void moveSeParaDireita(){}
 }

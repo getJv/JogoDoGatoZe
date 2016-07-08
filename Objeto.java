@@ -9,7 +9,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 abstract class Objeto extends Actor
 {
     protected  Personagem personagem; // Guarda o personagem que é utilizado em toda a classe
-    protected  Mundo1 mundo; // Guarda o mundo que é utilizado em toda a classe
+    //protected  Mundo1 mundo; // Guarda o mundo que é utilizado em toda a classe
     public static final int  LIMITE_DA_COLISAO = 9; // limita o limite da quina do objeto para que o personagem 'toque' e se considere como colisão
     protected int tamanho; //Guarda o tamanho desejado para o objeto
     protected int filetaInicial; //Guarda a posição inicial para desenho da nova imagem do objeto 
@@ -18,6 +18,7 @@ abstract class Objeto extends Actor
     protected int larguraDaFileta; //Guarda a largura do filete utilizado
     protected int alturaDaFileta; //Guarda a altura do filete utilizado
     protected int quantidadeDeFiletas;//Guarda a quantidade do filete utilizado
+    public static final int TAXA_INTERVALO_DE_ATUALIZACAO = 2;
 
     /**
      * Act - do whatever the Objeto wants to do. This method is called whenever
@@ -25,9 +26,16 @@ abstract class Objeto extends Actor
      */
     public void act() 
     {
-        mundo = (Mundo1) getWorld();
+        
     } 
-
+    /**
+     * Retorna o mundo em que o objeto esta inserido
+     */
+    public Mundo1 oMundo(){
+    
+        return  (Mundo1) getWorld();
+    
+    }
     /**
      * Confirma se houve de fato a colisão pelo lado esquerdo do objeto.
      */
@@ -213,5 +221,20 @@ abstract class Objeto extends Actor
      * Define a solução para criar a imagem que será renderizada
      */
     abstract GreenfootImage desenhar();
-
+    
+    /**
+     * Define a solução para o objeto mover-se para a esquerda
+     */
+    abstract void moveSeParaEsquerda();
+    
+    /**
+     * Define a solução para o objeto mover-se para a esquerda
+     */
+    abstract void moveSeParaDireita();
+    
+        
+    public boolean podeMoverObjetos(){
+        return (oMundo().getCiclo() % TAXA_INTERVALO_DE_ATUALIZACAO) == 0;
+    }
+    
 }

@@ -26,6 +26,12 @@ public class Linha extends Pisoteria
         
     }
     
+    public void moveSeParaEsquerda(){
+    
+    
+    
+    }
+    
      
     
 }

@@ -12,12 +12,14 @@ import java.util.List;
  */
 public class Roteiro extends Actor
 {
-    public static final int TAXA_INTERVALO_DE_ATUALIZACAO = 2;
+    
     private int tamanhoCenario;
     private int filetaAtual = 1;
     private Mundo1 mundo;
     private Map<Integer,ArrayList<Elenco>> roteiro = new HashMap<Integer,ArrayList<Elenco>> ();
     private Map<Integer,Boolean> mapaDoPiso = new HashMap<Integer,Boolean> ();
+    private Pisoteria ultimoPiso;
+    private int ultimoQuadro;
 
     /**
      * Act - do whatever the Roteiro wants to do. This method is called whenever
@@ -74,12 +76,12 @@ public class Roteiro extends Actor
     public void coloqueOsAtoresEmAcao(int quadro)  {
 
         ArrayList<Elenco> Elenco = roteiro.get(quadro);
-        for(Elenco ator : Elenco){
+        for(Elenco scriptDoAtor : Elenco){
 
             try{
-                Class clazz = Class.forName(ator.nomeDaClasse());
+                Class clazz = Class.forName(scriptDoAtor.nomeDaClasse());
                 Actor novoAtor  = (Actor) clazz.newInstance();
-                mundo.addObject(novoAtor, ator.getX(), ator.getY());
+                mundo.addObject(novoAtor, scriptDoAtor.getX(), scriptDoAtor.getY());
 
             }catch(Exception e){
 
@@ -91,10 +93,28 @@ public class Roteiro extends Actor
         }
     }
 
+    protected void atualizaPiso(int quadro){
+
+        if(quadro > 270){
+            quadro = quadro;
+        }
+        if(mapaDoPiso.get(quadro) != null ){
+
+            if(ultimoPiso == null){
+                ultimoPiso = new Pisoteria();
+                mundo.addObject(ultimoPiso, 698, 363); 
+                ultimoQuadro = quadro;
+            }else if (mundo.oHeroi().estaIndoPraDireta() && ultimoPiso != null && quadro > ultimoQuadro){
+                ultimoPiso.entreEmCenaPelaDireita();  
+                ultimoQuadro = quadro;
+                
+
+            }
+        }
+
+    }
     public void addPiso(int pontoInicial,int pontoFinal){
-
         while(pontoInicial < pontoFinal){
-
             mapaDoPiso.put(pontoInicial, true);
             pontoInicial++;
 
@@ -133,6 +153,17 @@ public class Roteiro extends Actor
      * Solicita ao Pisoteria que retorceda os pisos pelo cenario.
      */
     protected void tireOsPisosPelaDireita(){
+
+        List<Pisoteria> pisos = mundo.getObjects(Pisoteria.class);
+        for(Pisoteria piso: pisos){
+            piso.saiaDeCenaPelaDireita();
+        }
+    }
+
+    /**
+     * Solicita ao Pisoteria que coloque os pisos em cena pelo lado direito.
+     */
+    protected void coloqueOsPisosPelaDireita(){
 
         List<Pisoteria> pisos = mundo.getObjects(Pisoteria.class);
         for(Pisoteria piso: pisos){
@@ -207,38 +238,18 @@ public class Roteiro extends Actor
 
         if(mundo.oHeroi().estaIndoPraDireta() && mundo.possoAtualizarCenario()){
             for(Objeto objeto : objetosDoCenario){
-                int limiteEsquedo = objeto.getX() - objeto.getImage().getWidth()/2;
-                if(podeMoverObjetos()){
-                    if(limiteEsquedo > 1){ // impede que ambos os métodos de movimentação de objetos sejam execitados juntos
-
-                        objeto.move(mundo.TAMANHO_DO_QUADRO * -1);
-
-                    }else{
-                        tireOsPisosPelaEsquerda();
-                    }
-                }
-
+                
+                objeto.moveSeParaEsquerda();
             }
         }
         if(mundo.oHeroi().estaIndoPraEsquerda() && mundo.possoAtualizarCenario()){
             for(Objeto objeto : objetosDoCenario){
-                if(podeMoverObjetos()){
-                    int limiteDireito = objeto.getX() + objeto.getImage().getWidth()/2;
-                    if(limiteDireito < 700){ // impede que ambos os métodos de movimentação de objetos sejam execitados juntos
-                        objeto.move(mundo.TAMANHO_DO_QUADRO );}
-                    else{
-                        tireOsPisosPelaDireita(); 
-                    }
-
-                }
+                
 
             }
         }
 
     }
 
-    public boolean podeMoverObjetos(){
-        return (mundo.getCiclo() % TAXA_INTERVALO_DE_ATUALIZACAO) == 0;
-    }
-
+    
 }

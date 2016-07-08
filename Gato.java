@@ -8,6 +8,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class Gato extends Personagem
 {
+    
 
     /**
      * Act - do whatever the Ze wants to do. This method is called whenever
@@ -53,8 +54,8 @@ public class Gato extends Personagem
      */
 
     protected boolean possoAtualizarImagem(){
-        Mundo1 mundo = (Mundo1) getWorld();
-        return mundo.getCiclo() % INTERVALO_DE_ATUALIZACAO  == 0;
+
+        return oMundo().getCiclo() % INTERVALO_DE_ATUALIZACAO  == 0;
     }
 
     /**
@@ -66,21 +67,26 @@ public class Gato extends Personagem
 
             if(possoAtualizarImagem()){
                 proximoPasso++;
+                oMundo().aumentaKM();
             } 
 
             if(proximoPasso > 6){
                 proximoPasso = 1;
             }
 
+            
+
         }else if(estaParaEsquerda){
 
             if(possoAtualizarImagem()){
                 proximoPasso++;
+                oMundo().diminuiKM();
             }
             if(proximoPasso < 7 || proximoPasso > 12 ){
                 proximoPasso = 7;
             }
 
+            mundo.diminuiKM();
         }
 
     }
@@ -159,5 +165,5 @@ public class Gato extends Personagem
         estaPulando = false;
         alturaAtualDoPulo = 0;
     }
-    
+
 }

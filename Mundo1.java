@@ -78,42 +78,23 @@ public class Mundo1 extends World
         //Crio os Objetos vivos
         ze = new  Gato();
         Instrucoes instrucoes = new  Instrucoes();
-
-        //Colocos os objetos dentro do cenário cada
-        //criaSolo();
         addObject(instrucoes, 602, 80);
-
-        addObject(ze, POSICAO_INICIAL_PERSONAGEM, 300);
-        KMatual = POSICAO_INICIAL_PERSONAGEM;
-
-        //Pisoteria piso = new Pisoteria(200,1);
-        //addObject(new Pisoteria(200,1), 350, 363);
-
-        //addObject(new Pisoteria(200,1), 760, 363);
-
-        //addObject(new Pisoteria(200,1), 1000, 363);
-
-        //addObject(new Moedaria(), 350, 300);
-
-        roteiro.addPiso(0,350);
-        //roteiro.addPiso(400,700);
-        //roteiro.addPiso(400,500);
-        roteiro.criaPiso(0); 
-
-        //Coloca o objeto que mostra valores na tela
-        mt = new MostraTexto();
-        addObject(mt, 250,10);
-
-        //int t = 0;
-        // while(t < 300){
-        //  Pisoteria piso = new Pisoteria();
-        //   addObject(piso, t, alturaInicialDoSolo(piso));
-        //  t+=4;
-        //}
 
         placar = new Placar();
         addObject(new MostraTexto("Gato Zé"), 45,17);
         addObject(placar, 45 ,39);
+
+        addObject(ze, POSICAO_INICIAL_PERSONAGEM, 300);
+        KMatual = POSICAO_INICIAL_PERSONAGEM;
+
+        //roteiro.addPiso(0,350);
+        //roteiro.addPiso(400,550);
+        roteiro.addPiso(270,370);
+        //roteiro.criaPiso(0); 
+
+        //Coloca o objeto que mostra valores na tela
+        mt = new MostraTexto();
+        addObject(mt, 250,10);
 
         // prepare();
     }
@@ -147,17 +128,18 @@ public class Mundo1 extends World
             roteiro.coloqueOsAtoresEmAcao(KMAtual());
         }
 
-        roteiro.removaOsAtoresDoCenario();
         //valido se o cenário deve ou não ser atualizado com a proxima cena
         if(ze.estaIndoPraDireta() || ze.estaIndoPraEsquerda()  ){
-            projetor( proximaCena()); 
+            projetor(); 
+            roteiro.atualizaPiso(KMAtual());
+            roteiro.removaOsAtoresDoCenario();
             roteiro.atualizaObjetosPeloCenario();
 
         } 
         verificarLimitesDoCenario();
         contaCiclo();
 
-        mt.atualiza("quadro: " + Integer.toString(KMAtual()) );
+        mt.atualiza("KMAtual + quebra: " + Integer.toString(KMAtual()  )  );
         aplicarForcaDaGravidade();
 
     }
@@ -165,22 +147,16 @@ public class Mundo1 extends World
     /**
      * Solicita que o cenário seja atualizado com a próxima cena
      */
-    private void projetor(GreenfootImage proximaCena){
-        // Método que atualiza a imagem do cenário
-        setBackground( proximaCena); 
-    }
-
-    /**
-     * Retorna a próxima cena do filme de imagens
-     */
-    private GreenfootImage proximaCena(){
-
+    private void projetor(){
         GreenfootImage proximaCena = filme(); //Pego a proxima cena do filme
-        if(oCenarioPodeAtualizar){  
-            adiantaFilme();  
+
+        if(oCenarioPodeAtualizar && estaNoIntervaloDeAtualizacao()){  
+            controlaDirecao();  
             rebobinaFilme();
         }
-        return proximaCena;        
+
+        // Método que atualiza a imagem do cenário
+        setBackground( proximaCena); 
     }
 
     /**
@@ -196,23 +172,28 @@ public class Mundo1 extends World
     }
 
     /**
+     * Retorna verdadeiro para a constante que permite reduzir a taxa de atualização do cenario. 
+     */
+    private boolean estaNoIntervaloDeAtualizacao(){
+
+        return getCiclo() % TAXA_INTERVALO_DE_ATUALIZACAO == 0; // EXperimental do paralax para o fundo
+
+    }
+
+    /**
      * Atualizo a direção em que a cena foi atualizada, se o herói foi pra direita o quadro atual avança, se para esquerda retrocede
      */
-    private void adiantaFilme(){
+    private void controlaDirecao(){
 
         if(ze.estaIndoPraDireta()){
-            if(getCiclo() % TAXA_INTERVALO_DE_ATUALIZACAO == 0){ //// EXperimental do paralax para o fundo
-                this.quadroAtual += VELOCIDADE_ATUALIZACAO_QUADROS;
-            }
-            aumentaKM();
+            this.quadroAtual += VELOCIDADE_ATUALIZACAO_QUADROS;
+  
         }else{
-            if(getCiclo() % TAXA_INTERVALO_DE_ATUALIZACAO == 0){ //// EXperimental do paralax
-                this.quadroAtual -= VELOCIDADE_ATUALIZACAO_QUADROS;
-            }
-            diminuiKM();
+            this.quadroAtual -= VELOCIDADE_ATUALIZACAO_QUADROS;
         }
 
     }
+
     /**
      * Retorna verdadeiro para informar que o fundo do cenário pode atualizar. 
      * É recomendavel que a taxa de atualização do mundo seja sempre maior que a taxa de atualização dos demais objetos do cenário para dar a 'impressão' que
@@ -263,34 +244,7 @@ public class Mundo1 extends World
 
     }
 
-    /**
-     * Metodo temporário para teste de movimento
-
-    private void retirarObjetoDaCena(Objeto objeto){
-
-    if(objeto.getX() == 0) {
-
-    //if(objeto.pegarTamanho() - 4 < 1){
-
-    //    removeObject(objeto);
-    //}else{
-    // objeto.redesenhar(objeto.pegarTamanho() + 4, objeto.pegarFiletaInicial()+1); // criar metodo especifico no Objeto
-    //}
-
-    }else if(objeto.getX() == LARGURA_CENARIO-1) {
-
-    //if(objeto.pegarTamanho() - 4 < 1){
-    //  removeObject(objeto);
-    //}else{
-    // objeto.redesenhar(objeto.pegarTamanho() - 4, objeto.pegarFiletaInicial()-1);// criar metodo especifico no Objeto
-    //}
-
-    }
-    }
-     */
-
-
-    /**
+        /**
      * Solicita ao cenário para parar de atualizar sua movimentação
      */    
     public void pareDeAtualizarOCenario(){
@@ -389,15 +343,14 @@ public class Mundo1 extends World
      * Sempre que o personagem vai para direita aumentamos um KM, na sua posicao no percurso total do cenário
      */
     public void aumentaKM(){
-        this.KMatual++;
+        this.KMatual+=4;
     }
 
     /**
      * Sempre que o personagem vai para esquerda diminuimos um KM, na sua posicao no percurso total do cenário
      */
     public void diminuiKM(){
-        this.KMatual--;
-
+        this.KMatual-=4;
     }
 
     /**
