@@ -8,8 +8,34 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class Pisoteria extends Objeto
 {
+    int larguraTotal = 0;
+    int ultimoKM = 0;
+    
+    
+    
+    public  boolean estouCompleto(){
+        int pegarTamanho = pegarTamanho();
+        
+        return pegarTamanho() ==  larguraTotal;
+    }
+    
+    
+    
+    public Pisoteria(int larguraTotal,int posicaoNoMundo){
+        this.larguraTotal = larguraTotal;
+         this.ultimoKM = posicaoNoMundo;
+        
+        definirTamanho(4);
+        definirFiletaInicial(1);
+        definirArquivoDaImagem("objetos/piso/piso_",".png");
+        definirLarguraDaFileta(4);
+        definirAlturaDaFileta(54);
+        definirQuantidadeDeFiletas(41);
+        criar();
+   }
 
     public Pisoteria(){
+        
         definirTamanho(4);
         definirFiletaInicial(1);
         definirArquivoDaImagem("objetos/piso/piso_",".png");
@@ -18,17 +44,8 @@ public class Pisoteria extends Objeto
         definirQuantidadeDeFiletas(41);
         criar();
     }
-
-    public Pisoteria(int tamanho,int posicaoInicial){
-        definirTamanho(tamanho);
-        definirFiletaInicial(posicaoInicial);
-        definirArquivoDaImagem("objetos/piso/piso_",".png");
-        definirLarguraDaFileta(4);
-        definirAlturaDaFileta(54);
-        definirQuantidadeDeFiletas(41);
-        criar();
-    }
-
+    
+       
     public void act() 
     {
 
@@ -99,16 +116,6 @@ public class Pisoteria extends Objeto
     /**
      * Faz com que o tamanho e imagem do piso seja atualizada, criando assim a ideia de movimento
      */
-    protected void saiaDeCenaPelaEsquerda(){
-
-        if(limiteEsquerdoDoObjeto() <= 0){
-            redesenhar(pegarTamanho() - 4,  pegarProximaFileta() );
-        }
-    }
-
-    /**
-     * Faz com que o tamanho e imagem do piso seja atualizada, criando assim a ideia de movimento
-     */
     protected void saiaDeCenaPelaDireita(){
 
         if(limiteDireitoDoObjeto() >= 699 ){
@@ -164,19 +171,39 @@ public class Pisoteria extends Objeto
     public void moveSeParaEsquerda(){
 
         if(podeMoverObjetos()){
-            if(limiteEsquerdoDoObjeto() > 1){ // impede que ambos os métodos de movimentação de objetos sejam execitados juntos
+            
+            if (oMundo().oHeroi().estaIndoPraDireta() && !estouCompleto() && oMundo().KMAtual() > this.ultimoKM){
+                entreEmCenaPelaDireita();  
+                this.ultimoKM = oMundo().KMAtual();
+            }
+            
+            if(limiteEsquerdoDoObjeto() > 1 && estouCompleto()){ // impede que ambos os métodos de movimentação de objetos sejam execitados juntos
 
                 move(oMundo().TAMANHO_DO_QUADRO * -1);
 
-            }else{
-                saiaDeCenaPelaEsquerda();
             }
+            
+            saiaDeCenaPelaEsquerda();
+            
+            
         }
 
     }
-
+    
+    /**
+     * Faz com que o tamanho e imagem do piso seja atualizada, criando assim a ideia de movimento
+     */
+    protected void saiaDeCenaPelaEsquerda(){
+        if(limiteEsquerdoDoObjeto() <= 1){
+            redesenhar(pegarTamanho() - 4,  pegarProximaFileta() );
+            move(oMundo().TAMANHO_DO_QUADRO * -1);
+        }
+        if(limiteEsquerdoDoObjeto() <= 1 && pegarTamanho() <= 4){
+            oMundo().removeObject(this);
+        }
+    }
+    
     public void moveSeParaDireita(){
-
         if(podeMoverObjetos()){
             if(limiteDireitoDoObjeto() < 700){ // impede que ambos os métodos de movimentação de objetos sejam execitados juntos
                 move(oMundo().TAMANHO_DO_QUADRO );}
@@ -188,8 +215,5 @@ public class Pisoteria extends Objeto
 
     }
 
-    public boolean podeMoverObjetos(){
-        return (oMundo().getCiclo() % TAXA_INTERVALO_DE_ATUALIZACAO) == 0;
-    }
 
 }

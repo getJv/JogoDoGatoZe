@@ -86,7 +86,7 @@ public class Gato extends Personagem
                 proximoPasso = 7;
             }
 
-            mundo.diminuiKM();
+            
         }
 
     }

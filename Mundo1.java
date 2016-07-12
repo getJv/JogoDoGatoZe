@@ -195,16 +195,6 @@ public class Mundo1 extends World
     }
 
     /**
-     * Retorna verdadeiro para informar que o fundo do cenário pode atualizar. 
-     * É recomendavel que a taxa de atualização do mundo seja sempre maior que a taxa de atualização dos demais objetos do cenário para dar a 'impressão' que
-     * o que está no fundo sem move mais vagarozamente do que o que esta na frente. veja mais em: https://pt.wikipedia.org/wiki/Paralaxe
-     */
-    public boolean podeMoverOFundo()
-    {
-        return getCiclo() % TAXA_INTERVALO_DE_ATUALIZACAO == 0;
-    }
-
-    /**
      * Cria e monta a próxima cena quadro a quadro e retorna a imagem pronta
      */
     private GreenfootImage filme(){

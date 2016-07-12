@@ -8,8 +8,9 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class Elenco
 {
-    private int x;
-    private int y;
+    private int x = 0;
+    private int y = 0;
+    private int larguraTotal = 0;
     private String nomeDaClasse;
 
     public Elenco(int x,int y,String nomeDaClasse){
@@ -18,6 +19,20 @@ public class Elenco
         this.y = y;
         this.nomeDaClasse =  nomeDaClasse;
 
+    }
+    
+    public Elenco(int largura){
+
+        larguraTotal = largura;
+
+    }
+    
+    public void setLarguraTotal(int largura){
+        larguraTotal = largura;
+    
+    }
+    public int getLarguraTotal(){
+        return larguraTotal;
     }
 
     public int getX(){

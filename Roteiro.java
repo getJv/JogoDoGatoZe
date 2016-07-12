@@ -17,7 +17,8 @@ public class Roteiro extends Actor
     private int filetaAtual = 1;
     private Mundo1 mundo;
     private Map<Integer,ArrayList<Elenco>> roteiro = new HashMap<Integer,ArrayList<Elenco>> ();
-    private Map<Integer,Boolean> mapaDoPiso = new HashMap<Integer,Boolean> ();
+    //private Map<Integer,Boolean> mapaDoPiso = new HashMap<Integer,Boolean> ();
+    private Map<Integer,Elenco> mapaDoPiso = new HashMap<Integer,Elenco> ();
     private Pisoteria ultimoPiso;
     private int ultimoQuadro;
 
@@ -95,27 +96,24 @@ public class Roteiro extends Actor
 
     protected void atualizaPiso(int quadro){
 
-        if(quadro > 270){
-            quadro = quadro;
-        }
         if(mapaDoPiso.get(quadro) != null ){
 
             if(ultimoPiso == null){
-                ultimoPiso = new Pisoteria();
+                //varrer o array pra encontrar o tamanho total do piso. AQUIIII
+                ultimoPiso = new Pisoteria(mapaDoPiso.get(quadro).getLarguraTotal(),quadro);
                 mundo.addObject(ultimoPiso, 698, 363); 
                 ultimoQuadro = quadro;
-            }else if (mundo.oHeroi().estaIndoPraDireta() && ultimoPiso != null && quadro > ultimoQuadro){
-                ultimoPiso.entreEmCenaPelaDireita();  
-                ultimoQuadro = quadro;
-                
-
             }
+            
         }
 
     }
+    
     public void addPiso(int pontoInicial,int pontoFinal){
+        int tamanho = pontoFinal - pontoInicial;
         while(pontoInicial < pontoFinal){
-            mapaDoPiso.put(pontoInicial, true);
+            mapaDoPiso.put(pontoInicial, new Elenco(tamanho));
+            //mapaDoPiso.put(pontoInicial, true);
             pontoInicial++;
 
         }
@@ -136,28 +134,6 @@ public class Roteiro extends Actor
             }
         }
 
-    }
-
-    /**
-     * Solicita ao Pisoteria que retire os pisos do cenario pelo lado esquerdo.
-     */
-    protected void tireOsPisosPelaEsquerda(){
-
-        List<Pisoteria> pisos = mundo.getObjects(Pisoteria.class);
-        for(Pisoteria piso: pisos){
-            piso.saiaDeCenaPelaEsquerda();
-        }
-    }
-
-    /**
-     * Solicita ao Pisoteria que retorceda os pisos pelo cenario.
-     */
-    protected void tireOsPisosPelaDireita(){
-
-        List<Pisoteria> pisos = mundo.getObjects(Pisoteria.class);
-        for(Pisoteria piso: pisos){
-            piso.saiaDeCenaPelaDireita();
-        }
     }
 
     /**
@@ -191,7 +167,7 @@ public class Roteiro extends Actor
 
             try{
 
-                if(mapaDoPiso.get(pontoInicial)){
+                if(mapaDoPiso.get(pontoInicial) != null){
                     tamanhoBloco++;
 
                 }
@@ -244,7 +220,7 @@ public class Roteiro extends Actor
         }
         if(mundo.oHeroi().estaIndoPraEsquerda() && mundo.possoAtualizarCenario()){
             for(Objeto objeto : objetosDoCenario){
-                
+                objeto.moveSeParaDireita();
 
             }
         }
