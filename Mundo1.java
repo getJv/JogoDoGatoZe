@@ -77,6 +77,7 @@ public class Mundo1 extends World
 
         //Crio os Objetos vivos
         ze = new  Gato();
+        setActOrder(Pisoteria.class,Gato.class);
         Instrucoes instrucoes = new  Instrucoes();
         addObject(instrucoes, 602, 80);
 
@@ -90,13 +91,15 @@ public class Mundo1 extends World
         //roteiro.addPiso(0,350);
         //roteiro.addPiso(400,550);
         roteiro.addPiso(270,370);
+        roteiro.addPiso(400,440);
+        roteiro.addPiso(460,560);
         //roteiro.criaPiso(0); 
 
         //Coloca o objeto que mostra valores na tela
         mt = new MostraTexto();
         addObject(mt, 250,10);
 
-        // prepare();
+        //prepare();
     }
 
     /**
@@ -123,25 +126,16 @@ public class Mundo1 extends World
      */
     public void act() 
     {
-
-        if(roteiro.temNovoAtor(KMAtual())){
-            roteiro.coloqueOsAtoresEmAcao(KMAtual());
-        }
-
-        //valido se o cenário deve ou não ser atualizado com a proxima cena
+        contaCiclo();
         if(ze.estaIndoPraDireta() || ze.estaIndoPraEsquerda()  ){
             projetor(); 
-            roteiro.atualizaPiso(KMAtual());
-            roteiro.removaOsAtoresDoCenario();
-            roteiro.atualizaObjetosPeloCenario();
-
+            roteiro.coloqueOsPisosEmAcao();
+            roteiro.coloqueOsAtoresEmAcao();
+            verificarLimitesDoCenario();
         } 
-        verificarLimitesDoCenario();
-        contaCiclo();
-
-        mt.atualiza("KMAtual + quebra: " + Integer.toString(KMAtual()  )  );
+        mt.atualiza("KMAtual: " + Integer.toString(KMAtual()  )  );
         aplicarForcaDaGravidade();
-
+        
     }
 
     /**
@@ -187,7 +181,7 @@ public class Mundo1 extends World
 
         if(ze.estaIndoPraDireta()){
             this.quadroAtual += VELOCIDADE_ATUALIZACAO_QUADROS;
-  
+
         }else{
             this.quadroAtual -= VELOCIDADE_ATUALIZACAO_QUADROS;
         }
@@ -234,7 +228,7 @@ public class Mundo1 extends World
 
     }
 
-        /**
+    /**
      * Solicita ao cenário para parar de atualizar sua movimentação
      */    
     public void pareDeAtualizarOCenario(){
@@ -251,7 +245,7 @@ public class Mundo1 extends World
     /**
      * Solicita ao cenário para voltar atualizar sua movimentação
      */  
-    public void oCenarioPodeAtualizar(){
+    public void reinicieAtualizacaoDoCenario(){
 
         oCenarioPodeAtualizar = true;
 
@@ -260,13 +254,13 @@ public class Mundo1 extends World
     /**
      * retorna verdadeiro se o cenário pode
      */  
-    public boolean possoAtualizarCenario(){
+    public boolean podeAtualizarCenario(){
 
         return oCenarioPodeAtualizar;
 
     }
 
-    public void oCenarioNaoPodeAtualizar(){
+    public void pareAtualizacaoDoCenario(){
 
         oCenarioPodeAtualizar = false;
 
@@ -333,14 +327,17 @@ public class Mundo1 extends World
      * Sempre que o personagem vai para direita aumentamos um KM, na sua posicao no percurso total do cenário
      */
     public void aumentaKM(){
-        this.KMatual+=4;
+        if(oCenarioPodeAtualizar){
+            this.KMatual++;
+        }
+
     }
 
     /**
      * Sempre que o personagem vai para esquerda diminuimos um KM, na sua posicao no percurso total do cenário
      */
     public void diminuiKM(){
-        this.KMatual-=4;
+        this.KMatual--;
     }
 
     /**
@@ -356,25 +353,10 @@ public class Mundo1 extends World
      */
     private void prepare()
     {
-        Moedaria moedaria = new Moedaria();
-        addObject(moedaria,185,254);
-        Moedaria moedaria2 = new Moedaria();
-        addObject(moedaria2,507,316);
-        Moedaria moedaria3 = new Moedaria();
-        addObject(moedaria3,617,307);
-        Moedaria moedaria4 = new Moedaria();
-        addObject(moedaria4,461,253);
-        Moedaria moedaria5 = new Moedaria();
-        addObject(moedaria5,312,223);
-        Moedaria moedaria6 = new Moedaria();
-        addObject(moedaria6,113,330);
-        Moedaria moedaria7 = new Moedaria();
-        addObject(moedaria7,90,247);
-        moedaria6.setLocation(185,216);
-        moedaria7.setLocation(220,234);
-        moedaria5.setLocation(327,215);
-        moedaria4.setLocation(360,221);
-        moedaria2.setLocation(435,182);
-        moedaria3.setLocation(479,181);
+        Pisoteria pisoteria = new Pisoteria();
+        addObject(pisoteria,350,352);
+        pisoteria.setLocation(257,366);
+        pisoteria.redesenhar(500, 1);
+        pisoteria.setLocation(404,363);
     }
 }

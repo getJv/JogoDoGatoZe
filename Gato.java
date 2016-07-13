@@ -22,6 +22,7 @@ public class Gato extends Personagem
             caminheParaDireita();
             marcarPasso();
             setImage(retornaImagem());
+            oMundo().aumentaKM();
             if(getX() < getWorld().getWidth()/6 || estaPulando){
                 //move(TAMANHO_DO_PASSO);
             }
@@ -29,6 +30,7 @@ public class Gato extends Personagem
             caminheParaEsquerda();
             marcarPasso();
             setImage(retornaImagem());
+            oMundo().diminuiKM();
             if(getX() > getWorld().getWidth()/3|| estaPulando){
                 // move(TAMANHO_DO_PASSO *(-1));
             }
@@ -67,7 +69,7 @@ public class Gato extends Personagem
 
             if(possoAtualizarImagem()){
                 proximoPasso++;
-                oMundo().aumentaKM();
+                
             } 
 
             if(proximoPasso > 6){
@@ -80,7 +82,7 @@ public class Gato extends Personagem
 
             if(possoAtualizarImagem()){
                 proximoPasso++;
-                oMundo().diminuiKM();
+                
             }
             if(proximoPasso < 7 || proximoPasso > 12 ){
                 proximoPasso = 7;

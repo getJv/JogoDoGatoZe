@@ -8,8 +8,8 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 abstract class Objeto extends Actor
 {
+    public int id;
     protected  Personagem personagem; // Guarda o personagem que é utilizado em toda a classe
-    //protected  Mundo1 mundo; // Guarda o mundo que é utilizado em toda a classe
     public static final int  LIMITE_DA_COLISAO = 9; // limita o limite da quina do objeto para que o personagem 'toque' e se considere como colisão
     protected int tamanho; //Guarda o tamanho desejado para o objeto
     protected int filetaInicial; //Guarda a posição inicial para desenho da nova imagem do objeto 
@@ -20,6 +20,10 @@ abstract class Objeto extends Actor
     protected int quantidadeDeFiletas;//Guarda a quantidade do filete utilizado
     public static final int TAXA_INTERVALO_DE_ATUALIZACAO = 2;
 
+    public Objeto(){
+     this.id = Greenfoot.getRandomNumber(1000);
+    }
+    
     /**
      * Act - do whatever the Objeto wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.

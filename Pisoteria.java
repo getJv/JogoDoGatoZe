@@ -22,8 +22,8 @@ public class Pisoteria extends Objeto
     
     
     public Pisoteria(int larguraTotal,int posicaoNoMundo){
-        this.larguraTotal = larguraTotal;
-         this.ultimoKM = posicaoNoMundo;
+       this.larguraTotal = larguraTotal;
+       this.ultimoKM = posicaoNoMundo;
         
         definirTamanho(4);
         definirFiletaInicial(1);
@@ -48,7 +48,6 @@ public class Pisoteria extends Objeto
        
     public void act() 
     {
-
         super.act();
         if(temAlguemAqui()  ){
             bloqueiaLadoEsquerdo();
@@ -56,9 +55,20 @@ public class Pisoteria extends Objeto
             bloqueiaQueda(); 
             bloqueiaFundo(); 
         }else{
-            oMundo().oCenarioPodeAtualizar();
+            oMundo().reinicieAtualizacaoDoCenario();
         }
-
+        
+        if(oMundo().oHeroi().estaIndoPraDireta() && oMundo().podeAtualizarCenario()){
+            
+            moveSeParaEsquerda();
+        }
+        
+        if(oMundo().oHeroi().estaIndoPraEsquerda() && oMundo().podeAtualizarCenario()){
+            moveSeParaDireita();
+        }
+        // Deve ser o ultimo metodo a ser chamado, pois ele exclui-se a si proprio do mundo. 
+        //e se for executado antes das linhas acima teremos um eero
+        sairDoCenario();
     }
 
     /**
@@ -67,11 +77,11 @@ public class Pisoteria extends Objeto
     protected void bloqueiaLadoEsquerdo(){
         if(personagem.estaIndoPraDireta()){
             if( houveColisaoDoLadoEsquerdo() && !oPersonagemEstaAcimaDoObjeto() && !estaSobMeuPerimetro() ){
-                oMundo().oCenarioNaoPodeAtualizar();
+                oMundo().pareAtualizacaoDoCenario();
                 personagem.fiqueParado();
             }
         }else{
-            oMundo().oCenarioPodeAtualizar();
+            oMundo().pareAtualizacaoDoCenario();
         }
     }
 
@@ -81,11 +91,11 @@ public class Pisoteria extends Objeto
     protected void bloqueiaLadoDireito(){
         if (personagem.estaIndoPraEsquerda()){
             if(  houveColisaoDoLadoDireito () && !oPersonagemEstaAcimaDoObjeto() && !estaSobMeuPerimetro() ){
-                oMundo().oCenarioNaoPodeAtualizar();
+                oMundo().pareAtualizacaoDoCenario();
                 personagem.fiqueParado();
             }
         }else{
-            oMundo().oCenarioPodeAtualizar();
+            oMundo().pareAtualizacaoDoCenario();
 
         }
     }
@@ -198,6 +208,11 @@ public class Pisoteria extends Objeto
             redesenhar(pegarTamanho() - 4,  pegarProximaFileta() );
             move(oMundo().TAMANHO_DO_QUADRO * -1);
         }
+        
+    }
+    
+    private void sairDoCenario(){
+    
         if(limiteEsquerdoDoObjeto() <= 1 && pegarTamanho() <= 4){
             oMundo().removeObject(this);
         }
