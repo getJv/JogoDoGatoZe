@@ -77,7 +77,7 @@ public class Mundo1 extends World
 
         //Crio os Objetos vivos
         ze = new  Gato();
-        setActOrder(Pisoteria.class,Gato.class);
+        //setActOrder(Pisoteria.class,Gato.class);
         Instrucoes instrucoes = new  Instrucoes();
         addObject(instrucoes, 602, 80);
 

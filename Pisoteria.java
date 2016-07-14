@@ -10,32 +10,19 @@ public class Pisoteria extends Objeto
 {
     int larguraTotal = 0;
     int ultimoKM = 0;
-    
-    
+
     
     public  boolean estouCompleto(){
         int pegarTamanho = pegarTamanho();
-        
+
         return pegarTamanho() ==  larguraTotal;
     }
-    
-    
+
     
     public Pisoteria(int larguraTotal,int posicaoNoMundo){
-       this.larguraTotal = larguraTotal;
-       this.ultimoKM = posicaoNoMundo;
-        
-        definirTamanho(4);
-        definirFiletaInicial(1);
-        definirArquivoDaImagem("objetos/piso/piso_",".png");
-        definirLarguraDaFileta(4);
-        definirAlturaDaFileta(54);
-        definirQuantidadeDeFiletas(41);
-        criar();
-   }
+        this.larguraTotal = larguraTotal;
+        this.ultimoKM = posicaoNoMundo;
 
-    public Pisoteria(){
-        
         definirTamanho(4);
         definirFiletaInicial(1);
         definirArquivoDaImagem("objetos/piso/piso_",".png");
@@ -44,25 +31,35 @@ public class Pisoteria extends Objeto
         definirQuantidadeDeFiletas(41);
         criar();
     }
-    
-       
+
+    public Pisoteria(){
+
+        definirTamanho(4);
+        definirFiletaInicial(1);
+        definirArquivoDaImagem("objetos/piso/piso_",".png");
+        definirLarguraDaFileta(4);
+        definirAlturaDaFileta(54);
+        definirQuantidadeDeFiletas(41);
+        criar();
+    }
+
     public void act() 
     {
         super.act();
-        if(temAlguemAqui()  ){
-            bloqueiaLadoEsquerdo();
-            bloqueiaLadoDireito();
-            bloqueiaQueda(); 
-            bloqueiaFundo(); 
-        }else{
-            oMundo().reinicieAtualizacaoDoCenario();
-        }
-        
+        //if(temAlguemAqui()  ){
+        bloqueiaLadoEsquerdo();
+        bloqueiaLadoDireito();
+        bloqueiaQueda(); 
+        bloqueiaFundo(); 
+        //}else{
+        //oMundo().reinicieAtualizacaoDoCenario();
+        // }
+
         if(oMundo().oHeroi().estaIndoPraDireta() && oMundo().podeAtualizarCenario()){
-            
+
             moveSeParaEsquerda();
         }
-        
+
         if(oMundo().oHeroi().estaIndoPraEsquerda() && oMundo().podeAtualizarCenario()){
             moveSeParaDireita();
         }
@@ -75,13 +72,14 @@ public class Pisoteria extends Objeto
      * Realiza a bloqueio da passagem do ator pelo lado esquerdo do objeto.
      */
     protected void bloqueiaLadoEsquerdo(){
-        if(personagem.estaIndoPraDireta()){
+        if(oMundo().oHeroi().estaIndoPraDireta()){
             if( houveColisaoDoLadoEsquerdo() && !oPersonagemEstaAcimaDoObjeto() && !estaSobMeuPerimetro() ){
                 oMundo().pareAtualizacaoDoCenario();
-                personagem.fiqueParado();
+                oMundo().oHeroi().fiqueParado();
             }
-        }else{
-            oMundo().pareAtualizacaoDoCenario();
+        }else if(oMundo().oHeroi().estaIndoPraEsquerda()){
+            oMundo().reinicieAtualizacaoDoCenario();
+            oMundo().oHeroi().podeCaminhar();
         }
     }
 
@@ -89,15 +87,16 @@ public class Pisoteria extends Objeto
      * Realiza a bloqueio da passagem do ator pelo lado direito do objeto.
      */
     protected void bloqueiaLadoDireito(){
-        if (personagem.estaIndoPraEsquerda()){
+        if (oMundo().oHeroi().estaIndoPraEsquerda()){
             if(  houveColisaoDoLadoDireito () && !oPersonagemEstaAcimaDoObjeto() && !estaSobMeuPerimetro() ){
                 oMundo().pareAtualizacaoDoCenario();
-                personagem.fiqueParado();
+                oMundo().oHeroi().fiqueParado();
             }
-        }else{
-            oMundo().pareAtualizacaoDoCenario();
-
+        }else if(oMundo().oHeroi().estaIndoPraDireta()){
+            oMundo().reinicieAtualizacaoDoCenario();
+            oMundo().oHeroi().podeCaminhar();
         }
+
     }
 
     /**
@@ -105,9 +104,9 @@ public class Pisoteria extends Objeto
      */
     protected void bloqueiaFundo(){
         if( estaSobMeuPerimetro() && houveColisaoDoLadoDeBaixo()){
-            int novaAltura =  personagem.getY() + Mundo1.FORCA_DA_GRAVIDADE; 
-            personagem.setLocation(personagem.getX(),novaAltura);
-            personagem.interromperPulo();
+            int novaAltura =  oMundo().oHeroi().getY() + Mundo1.FORCA_DA_GRAVIDADE; 
+            oMundo().oHeroi().setLocation(oMundo().oHeroi().getX(),novaAltura);
+            oMundo().oHeroi().interromperPulo();
         }
     }
 
@@ -116,9 +115,9 @@ public class Pisoteria extends Objeto
      */
     protected void bloqueiaQueda(){
         if( estaSobMeuPerimetro() && houveColisaoDoLadoDeCima()){
-            int novaAltura =  personagem.getY() - Mundo1.FORCA_DA_GRAVIDADE ; 
-            personagem.setLocation(personagem.getX(),novaAltura);
-            personagem.estaEmTerraFirme(); 
+            int novaAltura =  oMundo().oHeroi().getY() - Mundo1.FORCA_DA_GRAVIDADE ; 
+            oMundo().oHeroi().setLocation(oMundo().oHeroi().getX(),novaAltura);
+            oMundo().oHeroi().estaEmTerraFirme(); 
         }
 
     }
@@ -180,26 +179,23 @@ public class Pisoteria extends Objeto
 
     public void moveSeParaEsquerda(){
 
-        if(podeMoverObjetos()){
-            
+        if(podeMoverObjetos() ){
+
             if (oMundo().oHeroi().estaIndoPraDireta() && !estouCompleto() && oMundo().KMAtual() > this.ultimoKM){
                 entreEmCenaPelaDireita();  
                 this.ultimoKM = oMundo().KMAtual();
             }
-            
-            if(limiteEsquerdoDoObjeto() > 1 && estouCompleto()){ // impede que ambos os métodos de movimentação de objetos sejam execitados juntos
+
+            if(limiteEsquerdoDoObjeto() > 1 && estouCompleto() && oMundo().podeAtualizarCenario()){ // impede que ambos os métodos de movimentação de objetos sejam execitados juntos
 
                 move(oMundo().TAMANHO_DO_QUADRO * -1);
 
             }
-            
-            saiaDeCenaPelaEsquerda();
-            
-            
-        }
 
+            saiaDeCenaPelaEsquerda();
+
+        }
     }
-    
     /**
      * Faz com que o tamanho e imagem do piso seja atualizada, criando assim a ideia de movimento
      */
@@ -208,16 +204,16 @@ public class Pisoteria extends Objeto
             redesenhar(pegarTamanho() - 4,  pegarProximaFileta() );
             move(oMundo().TAMANHO_DO_QUADRO * -1);
         }
-        
+
     }
-    
+
     private void sairDoCenario(){
-    
+
         if(limiteEsquerdoDoObjeto() <= 1 && pegarTamanho() <= 4){
             oMundo().removeObject(this);
         }
     }
-    
+
     public void moveSeParaDireita(){
         if(podeMoverObjetos()){
             if(limiteDireitoDoObjeto() < 700){ // impede que ambos os métodos de movimentação de objetos sejam execitados juntos
@@ -229,6 +225,5 @@ public class Pisoteria extends Objeto
         }
 
     }
-
 
 }

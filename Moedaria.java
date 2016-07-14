@@ -62,10 +62,10 @@ public class Moedaria extends Objeto
      * Gerencia quando o personagem captura a moeda
      */
     public void contabilizaMoeda(){
-        if(temAlguemAqui()){
+        //if(temAlguemAqui()){ // Arrumar essa colisão depois
             oMundo().removeObject(this);
             oMundo().getPlacar().acrescenteMais(VALOR_PONTO_MOEDA);
-        }
+        //}
 
     }
 

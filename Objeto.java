@@ -1,4 +1,5 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+import java.util.List;
 
 /**
  * Classe para pai para todo ator não vivo do jogo.
@@ -9,7 +10,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 abstract class Objeto extends Actor
 {
     public int id;
-    protected  Personagem personagem; // Guarda o personagem que é utilizado em toda a classe
+    //protected  Personagem personagem; // Guarda o personagem que é utilizado em toda a classe
     public static final int  LIMITE_DA_COLISAO = 9; // limita o limite da quina do objeto para que o personagem 'toque' e se considere como colisão
     protected int tamanho; //Guarda o tamanho desejado para o objeto
     protected int filetaInicial; //Guarda a posição inicial para desenho da nova imagem do objeto 
@@ -21,31 +22,42 @@ abstract class Objeto extends Actor
     public static final int TAXA_INTERVALO_DE_ATUALIZACAO = 2;
 
     public Objeto(){
-     this.id = Greenfoot.getRandomNumber(1000);
+        this.id = Greenfoot.getRandomNumber(1000);
     }
-    
+
     /**
      * Act - do whatever the Objeto wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
     public void act() 
     {
-        
+
     } 
+
     /**
      * Retorna o mundo em que o objeto esta inserido
      */
     public Mundo1 oMundo(){
-    
+
         return  (Mundo1) getWorld();
-    
+
     }
+
     /**
      * Confirma se houve de fato a colisão pelo lado esquerdo do objeto.
      */
     public boolean houveColisaoDoLadoEsquerdo(){
 
-        return (this.personagem.limiteDireito() - limiteEsquerdoDoObjeto() ) < LIMITE_DA_COLISAO;
+        List<Personagem> listaDeAtores = getIntersectingObjects(Personagem.class);
+        for(Personagem ator: listaDeAtores){
+            boolean houveColisao = (ator.limiteDireito() - limiteEsquerdoDoObjeto() ) < LIMITE_DA_COLISAO; 
+            if(houveColisao){
+                return houveColisao;
+            }
+
+        }
+        return false;
+        //return (this.personagem.limiteDireito() - limiteEsquerdoDoObjeto() ) < LIMITE_DA_COLISAO;
 
     }
 
@@ -85,27 +97,35 @@ abstract class Objeto extends Actor
 
     }
 
-    
     /**
      * Confirma se houve de fato a colisão pelo lado direito do objeto.
      */
     public boolean houveColisaoDoLadoDireito(){
-        return (limiteDireitoDoObjeto() - personagem.limiteEsquerdo()) < LIMITE_DA_COLISAO;
+        List<Personagem> listaDeAtores = getIntersectingObjects(Personagem.class);
+        for(Personagem ator: listaDeAtores){
+            //int limiteEsquerdoDoAtor = ator.getX() - (ator.getImage().getWidth()/2);
+            boolean houveColisao = (limiteDireitoDoObjeto() - ator.limiteEsquerdo()) < LIMITE_DA_COLISAO;
+            if(houveColisao){
+                return houveColisao;
+            }
+
+        }
+        return false;
+        //return (limiteDireitoDoObjeto() - personagem.limiteEsquerdo()) < LIMITE_DA_COLISAO;
     }
 
     /**
      * Confirma se houve de fato a colisão pelo lado de cima (topo) do objeto.
      */
     public boolean houveColisaoDoLadoDeCima(){
-        return ((personagem.alturaDosPes() - limiteDoTopoDoObjeto() ) <= LIMITE_DA_COLISAO  );
+        return ((oMundo().oHeroi().alturaDosPes() - limiteDoTopoDoObjeto() ) <= LIMITE_DA_COLISAO  );
     }
 
-    
     /**
      * Confirma se houve de fato a colisão pelo lado de baixo (base) do objeto.
      */
     public boolean houveColisaoDoLadoDeBaixo(){
-        return  (limiteDaBaseDoObjeto() - personagem.alturaDaCabeca() ) <= LIMITE_DA_COLISAO  ;
+        return  (limiteDaBaseDoObjeto() - oMundo().oHeroi().alturaDaCabeca() ) <= LIMITE_DA_COLISAO  ;
     }
 
     /**
@@ -113,22 +133,27 @@ abstract class Objeto extends Actor
      */
     public boolean estaSobMeuPerimetro(){
 
-        int limiteEsquerdoDoObjeto = limiteEsquerdoDoObjeto() + LIMITE_DA_COLISAO; // Mais a margem limite de colisão
-        int limiteDireitoDoObjeto  = limiteDireitoDoObjeto() - LIMITE_DA_COLISAO;  // menos a margem limite de colisão
+        List<Personagem> listaDeAtores = getIntersectingObjects(Personagem.class);
+        for(Personagem ator: listaDeAtores){
+            int limiteEsquerdoDoObjeto = limiteEsquerdoDoObjeto() + LIMITE_DA_COLISAO; // Mais a margem limite de colisão
+            int limiteDireitoDoObjeto  = limiteDireitoDoObjeto() - LIMITE_DA_COLISAO;  // menos a margem limite de colisão
 
-        boolean todoLadoEsquerdoDoAtorEstaSobreObjeto = personagem.limiteEsquerdo() < limiteDireitoDoObjeto && personagem.limiteEsquerdo() > limiteEsquerdoDoObjeto;
-        boolean todoLadoDireitoDoAtorEstaSobreObjeto = personagem.limiteDireito() > limiteEsquerdoDoObjeto && personagem.limiteDireito() < limiteDireitoDoObjeto;
+            boolean todoLadoEsquerdoDoAtorEstaSobreObjeto = ator.limiteEsquerdo() < limiteDireitoDoObjeto && ator.limiteEsquerdo() > limiteEsquerdoDoObjeto;
+            boolean todoLadoDireitoDoAtorEstaSobreObjeto = ator.limiteDireito() > limiteEsquerdoDoObjeto && ator.limiteDireito() < limiteDireitoDoObjeto;
 
-        if(todoLadoEsquerdoDoAtorEstaSobreObjeto || todoLadoDireitoDoAtorEstaSobreObjeto ){
-            return true;
+            if(todoLadoEsquerdoDoAtorEstaSobreObjeto || todoLadoDireitoDoAtorEstaSobreObjeto ){
+                return true;
+            }
+
+           
         }
+        
+        
         return false; 
-
     }
-
     /**
      * verifica se houve um a colisão 
-     */
+     
     public boolean temAlguemAqui(){
         this.personagem = (Personagem) getOneIntersectingObject(Personagem.class);
         if(personagem != null){
@@ -138,6 +163,7 @@ abstract class Objeto extends Actor
         return false;
 
     }
+    */
 
     /**
      * Retorna a altura do topo do objeto
@@ -150,7 +176,21 @@ abstract class Objeto extends Actor
      * Verifica se a altura dos pes ator esta acima do topo do objeto
      */
     public boolean oPersonagemEstaAcimaDoObjeto(){
-        return personagem.alturaDosPes() <= alturaDoTopo();
+        
+        List<Personagem> listaDeAtores = getIntersectingObjects(Personagem.class);
+        for(Personagem ator: listaDeAtores){
+            //int limiteEsquerdoDoAtor = ator.getX() - (ator.getImage().getWidth()/2);
+            boolean houveColisao = ator.alturaDosPes() <= alturaDoTopo();
+            if(houveColisao){
+                return houveColisao;
+            }
+
+        }
+        return false;
+        
+        
+        
+        
     }
 
     protected void definirLarguraDaFileta(int largura){
@@ -178,11 +218,10 @@ abstract class Objeto extends Actor
         this.tamanho = novoTamanho;
     }
 
-    
     public int pegarFiletaInicial(){
         return this.filetaInicial;
     }
-    
+
     /**
      * Retorna a proxima fileta para renderização da imagem
      */
@@ -193,7 +232,7 @@ abstract class Objeto extends Actor
         }
         return proximaFileta;
     }
-    
+
     /**
      * Retorna a fileta anterior para renderização da imagem
      */
@@ -208,37 +247,36 @@ abstract class Objeto extends Actor
     public void definirFiletaInicial(int proximaFileta){     
         this.filetaInicial = proximaFileta;
     }
-    
+
     /**
      * Define de fato a imagem do objeto
      */
     protected void criar(){
         setImage(desenhar());
     }
-    
+
     /**
      * Redesenha a imagem que será atualizada no objeto para dar ideia de movimento do mesmo junto ao movimento do cenário
      */
     abstract void redesenhar(int tamanho,int posicaoInicial);
-    
+
     /**
      * Define a solução para criar a imagem que será renderizada
      */
     abstract GreenfootImage desenhar();
-    
+
     /**
      * Define a solução para o objeto mover-se para a esquerda
      */
     abstract void moveSeParaEsquerda();
-    
+
     /**
      * Define a solução para o objeto mover-se para a esquerda
      */
     abstract void moveSeParaDireita();
-    
-        
+
     public boolean podeMoverObjetos(){
         return (oMundo().getCiclo() % TAXA_INTERVALO_DE_ATUALIZACAO) == 0;
     }
-    
+
 }
