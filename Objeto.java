@@ -57,7 +57,7 @@ abstract class Objeto extends Actor
 
         }
         return false;
-        //return (this.personagem.limiteDireito() - limiteEsquerdoDoObjeto() ) < LIMITE_DA_COLISAO;
+      
 
     }
 
@@ -111,7 +111,7 @@ abstract class Objeto extends Actor
 
         }
         return false;
-        //return (limiteDireitoDoObjeto() - personagem.limiteEsquerdo()) < LIMITE_DA_COLISAO;
+  
     }
 
     /**
@@ -151,20 +151,7 @@ abstract class Objeto extends Actor
         
         return false; 
     }
-    /**
-     * verifica se houve um a colisão 
-     
-    public boolean temAlguemAqui(){
-        this.personagem = (Personagem) getOneIntersectingObject(Personagem.class);
-        if(personagem != null){
-            return true;
-        }    
-
-        return false;
-
-    }
-    */
-
+    
     /**
      * Retorna a altura do topo do objeto
      */
@@ -187,10 +174,6 @@ abstract class Objeto extends Actor
 
         }
         return false;
-        
-        
-        
-        
     }
 
     protected void definirLarguraDaFileta(int largura){
@@ -210,7 +193,8 @@ abstract class Objeto extends Actor
         this.extensaoDoArquivo = nomeDaExtensao;
     }
 
-    public int pegarTamanho(){     
+    public int pegarTamanho(){
+        if(this.tamanho < 0) {this.tamanho =1;}
         return this.tamanho;
     }
 

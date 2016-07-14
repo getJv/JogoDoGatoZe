@@ -13,8 +13,6 @@ import java.util.List;
 public class Roteiro extends Actor
 {
 
-    //private int tamanhoCenario;
-    //private int filetaAtual = 1;
     private Mundo1 mundo;
     private Map<Integer,ArrayList<Elenco>> roteiro = new HashMap<Integer,ArrayList<Elenco>> ();
     private Map<Integer,Elenco> mapaDoPiso = new HashMap<Integer,Elenco> ();
@@ -122,65 +120,5 @@ public class Roteiro extends Actor
 
     }
     
-    /*
-    public int getFileta(){
-        return filetaAtual;
-    }
-
-    public void criaPiso(int pontoInicial){
-        //tiraPiso();
-
-        int tamanhoBloco = 0;
-        int xBloco = 0;
-        int yBloco = 363;
-        int controle = 0;
-
-        while(controle < 700){
-
-            if(controle == 350 || controle == 398){
-                controle = controle;
-            }
-
-            try{
-
-                if(mapaDoPiso.get(pontoInicial) != null){
-                    tamanhoBloco++;
-
-                }
-
-            }catch(NullPointerException e){
-
-                if(tamanhoBloco == 0 ){
-                    xBloco +=4;
-                }else{
-
-                    Pisoteria p = new Pisoteria(tamanhoBloco,getFileta());
-                    if(xBloco == 0){ // compensa o problema de renderização de imagens
-                        xBloco = xBloco + p.getImage().getWidth()/2;
-                    }
-                    mundo.addObject(p, xBloco, yBloco);
-                    xBloco = p.limiteDireitoDoObjeto();
-                    tamanhoBloco = 0;
-                }
-
-            }
-
-            pontoInicial++;
-            controle++;
-        }
-
-        if(tamanhoBloco != 0 ){
-
-            Pisoteria p = new Pisoteria(tamanhoBloco,getFileta());
-            //xBloco = xBloco + p.getImage().getWidth()/2;
-            mundo.addObject(p, xBloco, yBloco);
-            xBloco = p.limiteDireitoDoObjeto();
-            tamanhoBloco = 0;
-
-        }
-
-    }
-
-    */
-
+    
 }

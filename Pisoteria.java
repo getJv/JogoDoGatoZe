@@ -1,4 +1,5 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+import java.util.List;
 
 /**
  * Write a description of class Pisoteria here.
@@ -11,14 +12,12 @@ public class Pisoteria extends Objeto
     int larguraTotal = 0;
     int ultimoKM = 0;
 
-    
     public  boolean estouCompleto(){
         int pegarTamanho = pegarTamanho();
 
         return pegarTamanho() ==  larguraTotal;
     }
 
-    
     public Pisoteria(int larguraTotal,int posicaoNoMundo){
         this.larguraTotal = larguraTotal;
         this.ultimoKM = posicaoNoMundo;
@@ -66,6 +65,21 @@ public class Pisoteria extends Objeto
         // Deve ser o ultimo metodo a ser chamado, pois ele exclui-se a si proprio do mundo. 
         //e se for executado antes das linhas acima teremos um eero
         sairDoCenario();
+    }
+
+    /**
+     * Verifica se algum dos outros pisos do mundo fora o atual esta colidido com o ator.
+     */
+    public boolean oAtorColidiuComAlgumOutroPiso(){
+
+        List<Pisoteria> pisosNoMundo = oMundo().getObjects(Pisoteria.class);
+        for(Pisoteria piso : pisosNoMundo){
+            if(piso.houveColisaoDoLadoEsquerdo() || piso.houveColisaoDoLadoDireito()){
+                return true;
+            }
+
+        }
+        return false;
     }
 
     /**
@@ -123,20 +137,9 @@ public class Pisoteria extends Objeto
     }
 
     /**
-     * Faz com que o tamanho e imagem do piso seja atualizada, criando assim a ideia de movimento
+     * Faz com que o tamanho e imagem do piso seja atualizada, criando assim a ideia de movimento de entrada 
      */
-    protected void saiaDeCenaPelaDireita(){
-
-        if(limiteDireitoDoObjeto() >= 699 ){
-            redesenhar(pegarTamanho() - 4,  pegarFiletaInicial());
-        }
-
-    }
-
-    /**
-     * Faz com que o tamanho e imagem do piso seja atualizada, criando assim a ideia de movimento de entrada pela direita
-     */
-    protected void entreEmCenaPelaDireita(){
+    protected void entreEmCenaPela(){
 
         redesenhar(pegarTamanho() + 4,  pegarFiletaInicial());
 
@@ -160,6 +163,7 @@ public class Pisoteria extends Objeto
     protected GreenfootImage desenhar(){
 
         GreenfootImage novoPiso = new GreenfootImage(pegarTamanho(),alturaDaFileta); 
+        
         int posicaoDaNovaFileta = 0; 
         int filetaAtual = this.filetaInicial; 
 
@@ -177,25 +181,6 @@ public class Pisoteria extends Objeto
 
     }
 
-    public void moveSeParaEsquerda(){
-
-        if(podeMoverObjetos() ){
-
-            if (oMundo().oHeroi().estaIndoPraDireta() && !estouCompleto() && oMundo().KMAtual() > this.ultimoKM){
-                entreEmCenaPelaDireita();  
-                this.ultimoKM = oMundo().KMAtual();
-            }
-
-            if(limiteEsquerdoDoObjeto() > 1 && estouCompleto() && oMundo().podeAtualizarCenario()){ // impede que ambos os métodos de movimentação de objetos sejam execitados juntos
-
-                move(oMundo().TAMANHO_DO_QUADRO * -1);
-
-            }
-
-            saiaDeCenaPelaEsquerda();
-
-        }
-    }
     /**
      * Faz com que o tamanho e imagem do piso seja atualizada, criando assim a ideia de movimento
      */
@@ -206,24 +191,62 @@ public class Pisoteria extends Objeto
         }
 
     }
+    
+    /**
+     * Faz com que o tamanho e imagem do piso seja atualizada, criando assim a ideia de movimento
+     */
+    protected void saiaDeCenaPelaDireita(){
+
+        if(limiteDireitoDoObjeto() >= 699 ){
+            redesenhar(pegarTamanho() - 4,  pegarFiletaInicial());
+            move(oMundo().TAMANHO_DO_QUADRO);
+        }
+
+    }
 
     private void sairDoCenario(){
 
-        if(limiteEsquerdoDoObjeto() <= 1 && pegarTamanho() <= 4){
+        if((limiteEsquerdoDoObjeto() <= 1  && pegarTamanho() <= 4) || (limiteDireitoDoObjeto() >= 700  && pegarTamanho() <= 4)){
             oMundo().removeObject(this);
         }
     }
 
     public void moveSeParaDireita(){
         if(podeMoverObjetos()){
-            if(limiteDireitoDoObjeto() < 700){ // impede que ambos os métodos de movimentação de objetos sejam execitados juntos
-                move(oMundo().TAMANHO_DO_QUADRO );}
-            else{
-                saiaDeCenaPelaDireita(); 
+            if (oMundo().oHeroi().estaIndoPraEsquerda() && !estouCompleto() && oMundo().KMAtual() > this.ultimoKM){
+                entreEmCenaPela();  
+                this.ultimoKM = oMundo().KMAtual();
             }
 
-        }
+            if(limiteDireitoDoObjeto() < 700 && estouCompleto() && oMundo().podeAtualizarCenario() && !oAtorColidiuComAlgumOutroPiso()){ 
+                move(oMundo().TAMANHO_DO_QUADRO );
+            }
 
+            saiaDeCenaPelaDireita(); 
+
+        }
+    }
+    /**
+     * Controla o movimento do objeto conforme os atore interagem com o mundo.
+     */
+    public void moveSeParaEsquerda(){
+
+        if(podeMoverObjetos() ){
+
+            if (oMundo().oHeroi().estaIndoPraDireta() && !estouCompleto() && oMundo().KMAtual() > this.ultimoKM){
+                entreEmCenaPela();  
+                this.ultimoKM = oMundo().KMAtual();
+
+            }
+
+            if(limiteEsquerdoDoObjeto() > 1 && estouCompleto() && oMundo().podeAtualizarCenario() && !oAtorColidiuComAlgumOutroPiso()){ 
+                move(oMundo().TAMANHO_DO_QUADRO * -1);
+
+            }
+
+            saiaDeCenaPelaEsquerda();
+
+        }
     }
 
 }
