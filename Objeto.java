@@ -57,10 +57,8 @@ abstract class Objeto extends Actor
 
         }
         return false;
-      
 
     }
-
     /**
      * Retorna o limite (coordenada X) do lado esquerdo do objeto  ;
      */
@@ -111,7 +109,7 @@ abstract class Objeto extends Actor
 
         }
         return false;
-  
+
     }
 
     /**
@@ -145,13 +143,11 @@ abstract class Objeto extends Actor
                 return true;
             }
 
-           
         }
-        
         
         return false; 
     }
-    
+
     /**
      * Retorna a altura do topo do objeto
      */
@@ -163,7 +159,7 @@ abstract class Objeto extends Actor
      * Verifica se a altura dos pes ator esta acima do topo do objeto
      */
     public boolean oPersonagemEstaAcimaDoObjeto(){
-        
+
         List<Personagem> listaDeAtores = getIntersectingObjects(Personagem.class);
         for(Personagem ator: listaDeAtores){
             //int limiteEsquerdoDoAtor = ator.getX() - (ator.getImage().getWidth()/2);
@@ -194,7 +190,7 @@ abstract class Objeto extends Actor
     }
 
     public int pegarTamanho(){
-        if(this.tamanho < 0) {this.tamanho =1;}
+        if(this.tamanho < 1) {this.tamanho =1;}
         return this.tamanho;
     }
 

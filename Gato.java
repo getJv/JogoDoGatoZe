@@ -1,14 +1,13 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Classe para Criar o personagem do Gato Zé
+ * Classe para Criar o personagem do Gato
  * 
  * @author (Jhonatan Morais - jhonatanvinicius@gmail.com or jhonatan@dfjug.org) 
  * @version (1.0)
  */
 public class Gato extends Personagem
 {
-    
 
     /**
      * Act - do whatever the Ze wants to do. This method is called whenever
@@ -69,30 +68,26 @@ public class Gato extends Personagem
 
             if(possoAtualizarImagem()){
                 proximoPasso++;
-                
+
             } 
 
             if(proximoPasso > 6){
                 proximoPasso = 1;
             }
 
-            
 
         }else if(estaParaEsquerda){
 
             if(possoAtualizarImagem()){
                 proximoPasso++;
-                
+
             }
             if(proximoPasso < 7 || proximoPasso > 12 ){
                 proximoPasso = 7;
             }
 
-            
         }
-
     }
-
     /**
      * Garante que ao ficar parado a sprite do personagem seja atualizada para a posição inicial
      */

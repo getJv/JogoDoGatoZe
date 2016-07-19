@@ -135,7 +135,7 @@ public class Mundo1 extends World
         } 
         mt.atualiza("KMAtual: " + Integer.toString(KMAtual()  )  );
         aplicarForcaDaGravidade();
-        
+
     }
 
     /**
@@ -346,9 +346,7 @@ public class Mundo1 extends World
     public int KMAtual(){
         return this.KMatual;
     }
-    
-       
-    
+
     
     /**
      * Prepara o mundo para o início do programa.
@@ -362,6 +360,5 @@ public class Mundo1 extends World
         pisoteria.redesenhar(500, 1);
         pisoteria.setLocation(404,363);
     }
-    
-    
+
 }

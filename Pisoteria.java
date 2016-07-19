@@ -2,10 +2,10 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.List;
 
 /**
- * Write a description of class Pisoteria here.
+ * Classe responsável por criar e gerenciar os pisos do cenário do mundo.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author (Jhonatan Morais  - jhonatanvinicius@gmail.com or jhonatan@dfjug.org) 
+ * @version (1.0)
  */
 public class Pisoteria extends Objeto
 {
@@ -45,14 +45,11 @@ public class Pisoteria extends Objeto
     public void act() 
     {
         super.act();
-        //if(temAlguemAqui()  ){
+
         bloqueiaLadoEsquerdo();
         bloqueiaLadoDireito();
         bloqueiaQueda(); 
         bloqueiaFundo(); 
-        //}else{
-        //oMundo().reinicieAtualizacaoDoCenario();
-        // }
 
         if(oMundo().oHeroi().estaIndoPraDireta() && oMundo().podeAtualizarCenario()){
 
@@ -64,7 +61,7 @@ public class Pisoteria extends Objeto
         }
         // Deve ser o ultimo metodo a ser chamado, pois ele exclui-se a si proprio do mundo. 
         //e se for executado antes das linhas acima teremos um eero
-        sairDoCenario();
+        sairDoMundo();
     }
 
     /**
@@ -150,7 +147,7 @@ public class Pisoteria extends Objeto
      */
     public void redesenhar(int tamanho,int posicaoInicial){
 
-        if(tamanho < 0) {tamanho =1;}
+        if(tamanho < 1) {tamanho =1;}
         definirTamanho(tamanho);
         definirFiletaInicial(posicaoInicial);
         setImage(desenhar());
@@ -163,7 +160,7 @@ public class Pisoteria extends Objeto
     protected GreenfootImage desenhar(){
 
         GreenfootImage novoPiso = new GreenfootImage(pegarTamanho(),alturaDaFileta); 
-        
+
         int posicaoDaNovaFileta = 0; 
         int filetaAtual = this.filetaInicial; 
 
@@ -191,7 +188,7 @@ public class Pisoteria extends Objeto
         }
 
     }
-    
+
     /**
      * Faz com que o tamanho e imagem do piso seja atualizada, criando assim a ideia de movimento
      */
@@ -204,14 +201,26 @@ public class Pisoteria extends Objeto
 
     }
 
-    private void sairDoCenario(){
+    /**
+     * Retira o objeto do mundo
+     */
+    private void sairDoMundo(){
+        if (oMundo().oHeroi().estaIndoPraEsquerda()){
 
-        if((limiteEsquerdoDoObjeto() <= 1  && pegarTamanho() <= 4) || (limiteDireitoDoObjeto() >= 700  && pegarTamanho() <= 4)){
-            oMundo().removeObject(this);
+            if((limiteEsquerdoDoObjeto() >= 699  && pegarTamanho() <= 4) ){
+                oMundo().removeObject(this);
+            }
+        }else if (oMundo().oHeroi().estaIndoPraDireta()){
+            if( (limiteDireitoDoObjeto() <= 1  && pegarTamanho() <= 4)){
+                oMundo().removeObject(this);
+            }
         }
     }
 
-    public void moveSeParaDireita(){
+    /**
+     * Controla o movimento do objeto para direita conforme os atores interagem com o mundo.
+     */
+    protected void moveSeParaDireita(){
         if(podeMoverObjetos()){
             if (oMundo().oHeroi().estaIndoPraEsquerda() && !estouCompleto() && oMundo().KMAtual() > this.ultimoKM){
                 entreEmCenaPela();  
@@ -226,8 +235,9 @@ public class Pisoteria extends Objeto
 
         }
     }
+
     /**
-     * Controla o movimento do objeto conforme os atore interagem com o mundo.
+     * Controla o movimento do objeto para esquerda conforme os atores interagem com o mundo.
      */
     public void moveSeParaEsquerda(){
 

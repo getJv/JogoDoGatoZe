@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=Pisoteria
-comment0.text=\r\n\ Write\ a\ description\ of\ class\ Pisoteria\ here.\r\n\ \r\n\ @author\ (your\ name)\ \r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
+comment0.text=\r\n\ Classe\ respons\u00E1vel\ por\ criar\ e\ gerenciar\ os\ pisos\ do\ cen\u00E1rio\ do\ mundo.\r\n\ \r\n\ @author\ (Jhonatan\ Morais\ \ -\ jhonatanvinicius@gmail.com\ or\ jhonatan@dfjug.org)\ \r\n\ @version\ (1.0)\r\n
 comment1.params=
 comment1.target=boolean\ estouCompleto()
 comment10.params=
@@ -19,12 +19,14 @@ comment14.params=
 comment14.target=void\ saiaDeCenaPelaDireita()
 comment14.text=\r\n\ Faz\ com\ que\ o\ tamanho\ e\ imagem\ do\ piso\ seja\ atualizada,\ criando\ assim\ a\ ideia\ de\ movimento\r\n
 comment15.params=
-comment15.target=void\ sairDoCenario()
+comment15.target=void\ sairDoMundo()
+comment15.text=\r\n\ Retira\ o\ objeto\ do\ mundo\r\n
 comment16.params=
 comment16.target=void\ moveSeParaDireita()
+comment16.text=\r\n\ Controla\ o\ movimento\ do\ objeto\ para\ direita\ conforme\ os\ atores\ interagem\ com\ o\ mundo.\r\n
 comment17.params=
 comment17.target=void\ moveSeParaEsquerda()
-comment17.text=\r\n\ Controla\ o\ movimento\ do\ objeto\ conforme\ os\ atore\ interagem\ com\ o\ mundo.\r\n
+comment17.text=\r\n\ Controla\ o\ movimento\ do\ objeto\ para\ esquerda\ conforme\ os\ atores\ interagem\ com\ o\ mundo.\r\n
 comment2.params=larguraTotal\ posicaoNoMundo
 comment2.target=Pisoteria(int,\ int)
 comment3.params=

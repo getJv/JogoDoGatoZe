@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=Gato
-comment0.text=\r\n\ Classe\ para\ Criar\ o\ personagem\ do\ Gato\ Z\u00E9\r\n\ \r\n\ @author\ (Jhonatan\ Morais\ -\ jhonatanvinicius@gmail.com\ or\ jhonatan@dfjug.org)\ \r\n\ @version\ (1.0)\r\n
+comment0.text=\r\n\ Classe\ para\ Criar\ o\ personagem\ do\ Gato\r\n\ \r\n\ @author\ (Jhonatan\ Morais\ -\ jhonatanvinicius@gmail.com\ or\ jhonatan@dfjug.org)\ \r\n\ @version\ (1.0)\r\n
 comment1.params=
 comment1.target=void\ act()
 comment1.text=\r\n\ Act\ -\ do\ whatever\ the\ Ze\ wants\ to\ do.\ This\ method\ is\ called\ whenever\r\n\ the\ 'Act'\ or\ 'Run'\ button\ gets\ pressed\ in\ the\ environment.\r\n

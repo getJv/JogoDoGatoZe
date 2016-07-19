@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Write a description of class Roteiro here.
+ * Classe responsável por criar e gerenciar o roteiro de objetos que vão inserir com o cenário do mundo1.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author (Jhonatan Morais  - jhonatanvinicius@gmail.com or jhonatan@dfjug.org) 
+ * @version (1.0)
  */
 public class Roteiro extends Actor
 {
@@ -16,7 +16,6 @@ public class Roteiro extends Actor
     private Mundo1 mundo;
     private Map<Integer,ArrayList<Elenco>> roteiro = new HashMap<Integer,ArrayList<Elenco>> ();
     private Map<Integer,Elenco> mapaDoPiso = new HashMap<Integer,Elenco> ();
-   
 
     /**
      * Act - do whatever the Roteiro wants to do. This method is called whenever
@@ -71,7 +70,7 @@ public class Roteiro extends Actor
      * Verifica e adiciona os atores que devem entrar em cena
      */
     public void coloqueOsAtoresEmAcao()  {
-        
+
         if(temNovoAtor()){
             ArrayList<Elenco> Elenco = roteiro.get(mundo.KMAtual());
             for(Elenco scriptDoAtor : Elenco){
@@ -94,22 +93,17 @@ public class Roteiro extends Actor
 
     protected void coloqueOsPisosEmAcao(){
         if (mundo.KMAtual() > 400){
-               int tt =1; 
-               
-           }
-        
-        
-        if(mapaDoPiso.get(mundo.KMAtual()) != null ){
-
-           
-            Pisoteria piso = new Pisoteria(mapaDoPiso.get(mundo.KMAtual()).getLarguraTotal(),mundo.KMAtual());
-            mundo.addObject(piso, 698, 363); 
-         
+            int tt =1; 
 
         }
 
-    }
+        if(mapaDoPiso.get(mundo.KMAtual()) != null ){
+           
+            Pisoteria piso = new Pisoteria(mapaDoPiso.get(mundo.KMAtual()).getLarguraTotal(),mundo.KMAtual());
+            mundo.addObject(piso, 698, 363); 
 
+        }
+    }
     public void addPiso(int pontoInicial,int pontoFinal){
         int tamanho = pontoFinal - pontoInicial;
 
@@ -119,6 +113,5 @@ public class Roteiro extends Actor
         mapaDoPiso.put(pontoInicial, ator);
 
     }
-    
-    
+
 }
