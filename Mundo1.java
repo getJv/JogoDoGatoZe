@@ -337,7 +337,9 @@ public class Mundo1 extends World
      * Sempre que o personagem vai para esquerda diminuimos um KM, na sua posicao no percurso total do cenário
      */
     public void diminuiKM(){
-        this.KMatual--;
+        if(oCenarioPodeAtualizar){
+            this.KMatual--;
+        }
     }
 
     /**
@@ -347,7 +349,6 @@ public class Mundo1 extends World
         return this.KMatual;
     }
 
-    
     /**
      * Prepara o mundo para o início do programa.
      * Ou seja: criar os objetos iniciais e adicioná-los ao mundo.

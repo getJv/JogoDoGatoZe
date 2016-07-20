@@ -46,8 +46,8 @@ public class Pisoteria extends Objeto
     {
         super.act();
 
-        bloqueiaLadoEsquerdo();
         bloqueiaLadoDireito();
+        bloqueiaLadoEsquerdo();
         bloqueiaQueda(); 
         bloqueiaFundo(); 
 
@@ -87,10 +87,13 @@ public class Pisoteria extends Objeto
             if( houveColisaoDoLadoEsquerdo() && !oPersonagemEstaAcimaDoObjeto() && !estaSobMeuPerimetro() ){
                 oMundo().pareAtualizacaoDoCenario();
                 oMundo().oHeroi().fiqueParado();
+                
+                
             }
-        }else if(oMundo().oHeroi().estaIndoPraEsquerda()){
+        }else if(oMundo().oHeroi().estaIndoPraEsquerda() && houveColisaoDoLadoEsquerdo()){
             oMundo().reinicieAtualizacaoDoCenario();
             oMundo().oHeroi().podeCaminhar();
+            oMundo().oHeroi().setLocation(oMundo().oHeroi().getX()-4,oMundo().oHeroi().getY());
         }
     }
 
@@ -103,9 +106,10 @@ public class Pisoteria extends Objeto
                 oMundo().pareAtualizacaoDoCenario();
                 oMundo().oHeroi().fiqueParado();
             }
-        }else if(oMundo().oHeroi().estaIndoPraDireta()){
+        }else if(oMundo().oHeroi().estaIndoPraDireta() && houveColisaoDoLadoDireito()){
             oMundo().reinicieAtualizacaoDoCenario();
             oMundo().oHeroi().podeCaminhar();
+            oMundo().oHeroi().setLocation(oMundo().oHeroi().getX()+4,oMundo().oHeroi().getY());
         }
 
     }
